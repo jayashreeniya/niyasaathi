@@ -1,0 +1,302 @@
+{
+  "social_anxiety": {
+    "title": "Social Connection Support",
+    "message": "I hear how challenging social situations can be. Your feelings are completely valid, and many people experience similar struggles. Let's work together to find gentle ways to build connection that feel comfortable for you.",
+    "suggestions": [
+      {
+        "title": "Start Small",
+        "description": "Begin with brief, low-pressure interactions like saying hello to a neighbor or making small talk with a cashier",
+        "action": "Try one small social interaction this week",
+        "reminder": "Remember, even a simple 'hello' is a step toward connection"
+      },
+      {
+        "title": "Practice Self-Compassion",
+        "description": "Be kind to yourself when social situations feel difficult. Remind yourself that it's okay to feel nervous",
+        "action": "Write down three kind things to say to yourself before social situations",
+        "reminder": "You're doing your best, and that's enough"
+      },
+      {
+        "title": "Find Your Comfort Zone",
+        "description": "Identify social activities that feel less overwhelming - maybe one-on-one conversations or group activities where you can participate at your own pace",
+        "action": "List 2-3 social situations that feel manageable for you",
+        "reminder": "Progress happens one step at a time"
+      }
+    ],
+    "follow_up": "How did it feel to try one of these suggestions? Remember, there's no rush - we're building connection at your own pace."
+  },
+  "relationship_loss": {
+    "title": "Grief and Loss Support",
+    "description": "Loss can leave us feeling profoundly alone, even when surrounded by others. Your grief is real, and it's okay to take time to heal.",
+    "suggestions": [
+      {
+        "title": "Honor Your Feelings",
+        "description": "Allow yourself to feel the full range of emotions that come with loss. There's no right or wrong way to grieve",
+        "action": "Set aside 10 minutes each day to acknowledge and honor your feelings",
+        "reminder": "Your feelings are valid and important"
+      },
+      {
+        "title": "Create Meaningful Rituals",
+        "description": "Find ways to remember and honor the person or relationship you've lost",
+        "action": "Create a small ritual that feels meaningful to you",
+        "reminder": "Love and connection continue even after loss"
+      },
+      {
+        "title": "Seek Support",
+        "description": "Consider reaching out to a grief counselor or joining a support group where others understand your experience",
+        "action": "Research one grief support resource in your area",
+        "reminder": "You don't have to walk this path alone"
+      }
+    ],
+    "follow_up": "How are you feeling today? Remember, healing takes time, and it's okay to have both good and difficult days."
+  },
+  "general_loneliness": {
+    "title": "Building Connection",
+    "description": "Loneliness is a universal human experience, and you're not alone in feeling this way. Let's explore ways to build meaningful connections that work for you.",
+    "suggestions": [
+      {
+        "title": "Connect with Yourself",
+        "description": "Sometimes the most important connection is the one we have with ourselves. Practice self-care and self-compassion",
+        "action": "Spend 15 minutes doing something that brings you joy",
+        "reminder": "You are worthy of love and connection"
+      },
+      {
+        "title": "Reach Out",
+        "description": "Consider reaching out to someone you haven't talked to in a while, or join a group or activity that interests you",
+        "action": "Send a message to one person you'd like to reconnect with",
+        "reminder": "Small steps lead to meaningful connections"
+      },
+      {
+        "title": "Practice Gratitude",
+        "description": "Notice and appreciate the connections you do have, no matter how small they may seem",
+        "action": "Write down three things you're grateful for today",
+        "reminder": "Connection comes in many forms"
+      }
+    ],
+    "follow_up": "How are you feeling about connection today? Remember, every step toward connection is valuable."
+  },
+  "relationship_loss": {
+    "title": "Healing After Relationship Changes",
+    "description": "Relationship changes can leave us feeling profoundly alone, even when surrounded by others. Your feelings are real, and it's okay to take time to heal.",
+    "suggestions": [
+      {
+        "title": "Gentle Self-Reflection",
+        "description": "Take time to process your feelings through gentle reflection exercises",
+        "action": "Try the reflection exercise we discussed - writing about what you miss, what hurts, and what you did right",
+        "reminder": "Your feelings deserve to be witnessed honestly"
+      },
+      {
+        "title": "Reclaim Your Space",
+        "description": "Reclaim activities and places that remind you of the relationship, but make them your own",
+        "action": "Try doing one activity you used to share, but with your own personal touch",
+        "reminder": "This still belongs to you"
+      },
+      {
+        "title": "Weekly Journal Practice",
+        "description": "Use the daily reflection questions to process your experience gradually",
+        "action": "Try one or two of the daily reflection questions this week",
+        "reminder": "Healing happens one day at a time"
+      }
+    ],
+    "follow_up": "How are you feeling today? Remember, you don't have to rush your grief - I'm here to walk with you."
+  },
+  "moving": {
+    "title": "Building Belonging in a New Place",
+    "description": "Moving to a new place can be exciting but also deeply lonely. It's normal to miss what you left behind while trying to build something new.",
+    "suggestions": [
+      {
+        "title": "Create Familiar Anchors",
+        "description": "Bring pieces of your old life into your new space - routines, rituals, or items that feel like home",
+        "action": "Identify one routine or ritual from your old life that you can recreate here",
+        "reminder": "Home is something you carry with you"
+      },
+      {
+        "title": "Explore Your New Community",
+        "description": "Take small steps to discover your new environment and find places that feel welcoming",
+        "action": "Visit one new place in your area this week - a coffee shop, park, or library",
+        "reminder": "Every new place was once unfamiliar to someone"
+      },
+      {
+        "title": "Connect with Others in Transition",
+        "description": "Seek out others who are also new to the area or going through similar transitions",
+        "action": "Look for local groups or online communities for newcomers",
+        "reminder": "You're not the only one feeling this way"
+      }
+    ],
+    "follow_up": "How are you settling into your new place? Remember, belonging takes time to grow."
+  },
+  "emotional_intimacy": {
+    "title": "Building Deeper Connections",
+    "description": "Feeling alone even when surrounded by people is a special kind of loneliness. You deserve relationships where you can be fully seen and known.",
+    "suggestions": [
+      {
+        "title": "Practice Vulnerability",
+        "description": "Start with small acts of sharing your true thoughts and feelings with trusted people",
+        "action": "Share one genuine thought or feeling with someone you trust this week",
+        "reminder": "Vulnerability is a strength, not a weakness"
+      },
+      {
+        "title": "Seek Authentic Spaces",
+        "description": "Look for communities or groups where people value deep, meaningful connection",
+        "action": "Research one group or activity that focuses on authentic connection",
+        "reminder": "Your need for depth is beautiful and valid"
+      },
+      {
+        "title": "Honor Your Full Self",
+        "description": "Practice showing more of your authentic self in safe spaces",
+        "action": "Identify one part of yourself you've been hiding and find a safe way to express it",
+        "reminder": "You deserve to be fully known and loved"
+      }
+    ],
+    "follow_up": "How does it feel to think about showing more of your authentic self? Remember, you're worthy of deep connection."
+  },
+  "different_life_stage": {
+    "title": "Finding Your Own Path",
+    "description": "Feeling out of sync with your peers can be incredibly isolating. Your journey is unique and valuable, even when it doesn't match others' timelines.",
+    "suggestions": [
+      {
+        "title": "Celebrate Your Uniqueness",
+        "description": "Focus on what makes your path special and meaningful to you",
+        "action": "Write down three things about your current life stage that you're actually proud of",
+        "reminder": "Your story is unfolding at exactly the right pace for you"
+      },
+      {
+        "title": "Find Your Tribe",
+        "description": "Seek out people who are at similar life stages or who understand your journey",
+        "action": "Look for one group or community where you might find people on similar paths",
+        "reminder": "You don't have to walk alone"
+      },
+      {
+        "title": "Trust Your Timing",
+        "description": "Practice trusting that you're exactly where you need to be right now",
+        "action": "Write a letter to your future self about why this time in your life matters",
+        "reminder": "Your timeline is perfect for you"
+      }
+    ],
+    "follow_up": "How does it feel to honor your own path? Remember, you're not behind - you're exactly where you need to be."
+  },
+  "digital_disconnection": {
+    "title": "Balancing Digital and Real Connection",
+    "description": "In our hyperconnected world, it's easy to feel lonely despite being constantly online. Let's find ways to create more meaningful connections both online and offline.",
+    "suggestions": [
+      {
+        "title": "Digital Boundaries",
+        "description": "Set healthy limits on your digital consumption to make room for real connection",
+        "action": "Try one hour of digital detox each day this week",
+        "reminder": "Real connection happens in the spaces between screens"
+      },
+      {
+        "title": "Quality Over Quantity",
+        "description": "Focus on deepening a few meaningful online connections rather than maintaining many shallow ones",
+        "action": "Reach out to one person online for a deeper, more meaningful conversation",
+        "reminder": "One real connection is worth more than a hundred likes"
+      },
+      {
+        "title": "Bridge Digital and Real",
+        "description": "Use online connections as a bridge to real-world relationships",
+        "action": "Consider meeting one online friend in person or joining a local group related to your online interests",
+        "reminder": "The best connections often start online and grow offline"
+      }
+    ],
+    "follow_up": "How does it feel to think about creating more meaningful digital connections? Remember, technology can be a tool for real connection."
+  },
+  "unprocessed_grief": {
+    "title": "Honoring Your Grief",
+    "description": "Unprocessed grief can create a deep sense of loneliness. Your loss matters, and you deserve space to grieve in your own way and time.",
+    "suggestions": [
+      {
+        "title": "Create Space for Grief",
+        "description": "Set aside dedicated time to honor and process your feelings of loss",
+        "action": "Create a small ritual or space where you can safely express your grief",
+        "reminder": "Your grief deserves to be witnessed and honored"
+      },
+      {
+        "title": "Seek Support",
+        "description": "Consider reaching out to a grief counselor or joining a grief support group",
+        "action": "Research one grief support resource in your area or online",
+        "reminder": "You don't have to carry this alone"
+      },
+      {
+        "title": "Honor What You've Lost",
+        "description": "Find meaningful ways to remember and honor the person or thing you've lost",
+        "action": "Create something - a letter, a memory box, or a ritual - to honor your loss",
+        "reminder": "Love continues even after loss"
+      }
+    ],
+    "follow_up": "How are you feeling about giving your grief the space it needs? Remember, healing happens at your own pace."
+  },
+  "feeling_misunderstood": {
+    "title": "Being Fully Seen and Known",
+    "description": "Feeling like you have to hide parts of yourself is exhausting and lonely. You deserve spaces where you can be your authentic self.",
+    "suggestions": [
+      {
+        "title": "Find Safe Spaces",
+        "description": "Seek out communities and people who celebrate your authentic self",
+        "action": "Identify one space or group where you feel you can be more yourself",
+        "reminder": "You deserve to be fully accepted for who you are"
+      },
+      {
+        "title": "Practice Self-Expression",
+        "description": "Find creative ways to express the parts of yourself you've been hiding",
+        "action": "Try one form of self-expression - writing, art, music, or movement",
+        "reminder": "Your authentic self is beautiful and worthy"
+      },
+      {
+        "title": "Set Healthy Boundaries",
+        "description": "Learn to protect your authentic self from people who don't appreciate it",
+        "action": "Practice saying 'no' to situations where you feel you have to hide",
+        "reminder": "You don't have to shrink to make others comfortable"
+      }
+    ],
+    "follow_up": "How does it feel to think about showing more of your authentic self? Remember, you are worthy of being fully known."
+  },
+  "not_feeling_chosen": {
+    "title": "Building Reciprocal Relationships",
+    "description": "Always being the one to reach out can be exhausting and hurtful. You deserve relationships where you feel valued and chosen.",
+    "suggestions": [
+      {
+        "title": "Evaluate Your Relationships",
+        "description": "Honestly assess which relationships are truly reciprocal and which ones drain your energy",
+        "action": "Make a list of relationships and note which ones feel balanced",
+        "reminder": "Your energy is precious and deserves to be matched"
+      },
+      {
+        "title": "Set Healthy Boundaries",
+        "description": "Learn to stop over-extending yourself in relationships that don't reciprocate",
+        "action": "Try not reaching out first to one person who rarely initiates contact",
+        "reminder": "You deserve to be pursued as much as you pursue others"
+      },
+      {
+        "title": "Invest in Reciprocity",
+        "description": "Focus your energy on relationships that naturally feel mutual and supportive",
+        "action": "Reach out to one person who consistently shows up for you",
+        "reminder": "Mutual relationships are worth investing in"
+      }
+    ],
+    "follow_up": "How does it feel to think about building more reciprocal relationships? Remember, you deserve to be chosen."
+  },
+  "low_self_worth": {
+    "title": "Recognizing Your Worth",
+    "description": "Believing you're not interesting or worthy enough for connection is a painful place to be. You are inherently valuable and deserving of love.",
+    "suggestions": [
+      {
+        "title": "Practice Self-Compassion",
+        "description": "Be as kind to yourself as you would be to a dear friend",
+        "action": "Write down three things you like about yourself or are proud of",
+        "reminder": "You are worthy of love and connection exactly as you are"
+      },
+      {
+        "title": "Challenge Negative Thoughts",
+        "description": "Notice when you're being hard on yourself and practice more realistic self-talk",
+        "action": "Replace one negative thought about yourself with a more compassionate one",
+        "reminder": "Your thoughts are not always true"
+      },
+      {
+        "title": "Celebrate Small Wins",
+        "description": "Acknowledge and celebrate your accomplishments, no matter how small they seem",
+        "action": "Write down one thing you did well today, no matter how small",
+        "reminder": "Every step forward is worth celebrating"
+      }
+    ],
+    "follow_up": "How does it feel to practice being kinder to yourself? Remember, you are inherently worthy of love and belonging."
+  }
+} 

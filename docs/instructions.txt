@@ -1,0 +1,1 @@
+Instructions to set up and deploy the chatbot with Cursor or Firebase.
