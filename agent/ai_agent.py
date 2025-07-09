@@ -277,33 +277,33 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
             
             # Check if we've reached the end of a follow-up section
             if current_section.startswith('Follow-up:'):
-                # Check if the next item is not in the same follow-up section
+                # Check if the next item is in a different follow-up section or non-follow-up section
                 if next_progress < len(self.loneliness_script):
                     next_item = self.loneliness_script[next_progress]
                     next_section = next_item.get('section', '')
                     
-                    # If we're moving to a different section, transition to intervention
-                    if not next_section.startswith('Follow-up:'):
-                        # Map current branch to appropriate intervention
-                        if current_branch == 'relationship_loss':
+                    # If we're moving to a different follow-up section, transition to intervention
+                    if next_section != current_section:
+                        # Map current branch to appropriate intervention based on the follow-up section
+                        if 'Changes in Relationships' in current_section:
                             return 'intervention_relationship_loss'
-                        elif current_branch == 'moving':
+                        elif 'After Moving' in current_section:
                             return 'intervention_moving'
-                        elif current_branch == 'social_anxiety':
+                        elif 'Social Anxiety' in current_section:
                             return 'intervention_social_anxiety'
-                        elif current_branch == 'emotional_intimacy':
+                        elif 'Emotional Intimacy' in current_section:
                             return 'intervention_emotional_intimacy'
-                        elif current_branch == 'different_life_stage':
+                        elif 'Different Life Stage' in current_section:
                             return 'intervention_different_life_stage'
-                        elif current_branch == 'digital_disconnection':
+                        elif 'Digital Disconnection' in current_section:
                             return 'intervention_digital_disconnection'
-                        elif current_branch == 'unprocessed_grief':
+                        elif 'Unprocessed Grief' in current_section:
                             return 'intervention_unprocessed_grief'
-                        elif current_branch == 'feeling_misunderstood':
+                        elif 'Feeling Misunderstood' in current_section:
                             return 'intervention_feeling_misunderstood'
-                        elif current_branch == 'not_feeling_chosen':
+                        elif 'Not Feeling Chosen' in current_section:
                             return 'intervention_not_feeling_chosen'
-                        elif current_branch == 'low_self_worth':
+                        elif 'Low Self-Worth' in current_section:
                             return 'intervention_low_self_worth'
                         else:
                             return 'intervention_general_loneliness'
@@ -334,6 +334,98 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
             else:
                 return 'intervention_general_loneliness'
     
+    def _get_intervention_stage(self, intervention_type: str, stage_index: int = 0) -> Dict:
+        """Get a specific stage of an intervention"""
+        if intervention_type not in self.interventions:
+            return None
+        
+        intervention = self.interventions[intervention_type]
+        if 'intervention_stages' not in intervention:
+            return None
+        
+        stages = intervention['intervention_stages']
+        if 0 <= stage_index < len(stages):
+            return stages[stage_index]
+        return None
+    
+    def _get_next_intervention_stage(self, user_data: Dict, user_message: str) -> Dict:
+        """Get the next stage in the intervention based on user response"""
+        intervention_type = user_data.get('intervention_type')
+        current_stage_index = user_data.get('intervention_stage_index', 0)
+        
+        if not intervention_type:
+            return None
+        
+        # Get current stage
+        current_stage = self._get_intervention_stage(intervention_type, current_stage_index)
+        if not current_stage:
+            return None
+        
+        # Determine next stage based on current stage type and user response
+        next_stage_index = current_stage_index + 1
+        
+        # Check if we should move to next stage
+        if current_stage['type'] == 'conversation':
+            # For conversation stages, move to next stage
+            return self._get_intervention_stage(intervention_type, next_stage_index)
+        
+        elif current_stage['type'] == 'real_time_practice':
+            # For real-time practices, move to next stage after user responds
+            return self._get_intervention_stage(intervention_type, next_stage_index)
+        
+        elif current_stage['type'] == 'self_guided':
+            # For self-guided practices, create action item and move to next stage
+            self._create_action_item(user_data, current_stage)
+            return self._get_intervention_stage(intervention_type, next_stage_index)
+        
+        elif current_stage['type'] == 'collaborative':
+            # For collaborative practices, check if user wants to continue
+            if any(word in user_message.lower() for word in ['yes', 'okay', 'sure', 'continue', 'ok']):
+                return self._get_intervention_stage(intervention_type, next_stage_index)
+            else:
+                # Skip to closing stage
+                return self._get_intervention_stage(intervention_type, len(intervention['intervention_stages']) - 1)
+        
+        return None
+    
+    def _create_action_item(self, user_data: Dict, stage: Dict):
+        """Create an action item for self-guided practices"""
+        if 'action_items' not in user_data:
+            user_data['action_items'] = []
+        
+        action_item = {
+            'id': f"{stage['stage']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            'type': stage['type'],
+            'title': stage['title'],
+            'description': stage['prompt'],
+            'duration': stage.get('duration', ''),
+            'reminder_after': stage.get('reminder_after', '8 hours'),
+            'follow_up_question': stage.get('follow_up_question', ''),
+            'created_at': datetime.now().isoformat(),
+            'due_date': self._calculate_due_date(stage.get('reminder_after', '8 hours')),
+            'completed': False,
+            'reminder_sent': False,
+            'daily_prompts': stage.get('daily_prompts', [])
+        }
+        
+        user_data['action_items'].append(action_item)
+    
+    def _calculate_due_date(self, reminder_after: str) -> str:
+        """Calculate due date based on reminder_after string"""
+        now = datetime.now()
+        
+        if 'hours' in reminder_after:
+            hours = int(reminder_after.split()[0])
+            return (now + timedelta(hours=hours)).isoformat()
+        elif 'days' in reminder_after:
+            days = int(reminder_after.split()[0])
+            return (now + timedelta(days=days)).isoformat()
+        elif 'week' in reminder_after:
+            return (now + timedelta(days=7)).isoformat()
+        else:
+            # Default to 8 hours
+            return (now + timedelta(hours=8)).isoformat()
+    
     def _get_intervention_response(self, intervention_type: str) -> str:
         """Get appropriate intervention response"""
         if intervention_type not in self.interventions:
@@ -341,6 +433,20 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
         
         intervention = self.interventions[intervention_type]
         
+        # Check if this intervention has stages (new format)
+        if 'intervention_stages' in intervention:
+            # Start with the first stage
+            stages = intervention['intervention_stages']
+            if stages:
+                first_stage = stages[0]
+                response = f"{intervention.get('title', 'Support')}\n\n"
+                response += f"{intervention.get('description', '')}\n\n"
+                response += f"{first_stage['prompt']}"
+                
+                # Store intervention context for multi-stage flow
+                return response
+        
+        # Fallback to old format
         response = f"{intervention.get('title', 'Support')}\n\n"
         response += f"{intervention.get('message', intervention.get('description', ''))}\n\n"
         
@@ -431,6 +537,7 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                         response = self._get_intervention_response(intervention_type)
                         user_data['current_stage'] = 'intervention'
                         user_data['intervention_type'] = intervention_type
+                        user_data['intervention_stage_index'] = 0
                     elif next_item_id.startswith('script_'):
                         script_progress = int(next_item_id.replace('script_', ''))
                         current_item = self.loneliness_script[script_progress]
@@ -441,6 +548,30 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                         action_items = self._check_for_action_items(user_data, current_item)
                     else:
                         response = "Thank you for sharing that with me. How are you feeling right now?"
+                elif current_stage == 'intervention':
+                    # Handle multi-stage intervention flow
+                    next_stage = self._get_next_intervention_stage(user_data, user_message)
+                    if next_stage:
+                        response = next_stage['prompt']
+                        user_data['intervention_stage_index'] = user_data.get('intervention_stage_index', 0) + 1
+                        
+                        # Check if this is the last stage
+                        intervention_type = user_data.get('intervention_type')
+                        if intervention_type in self.interventions:
+                            intervention = self.interventions[intervention_type]
+                            if 'intervention_stages' in intervention:
+                                stages = intervention['intervention_stages']
+                                if user_data['intervention_stage_index'] >= len(stages):
+                                    # End of intervention, return to general conversation
+                                    user_data['current_stage'] = 'general'
+                                    user_data['intervention_type'] = None
+                                    user_data['intervention_stage_index'] = 0
+                    else:
+                        # End of intervention or error, return to general conversation
+                        response = "Thank you for working through this with me. How are you feeling now?"
+                        user_data['current_stage'] = 'general'
+                        user_data['intervention_type'] = None
+                        user_data['intervention_stage_index'] = 0
                 else:
                     next_question_id = self._determine_next_question(user_data, user_message)
                     if next_question_id.startswith('intervention_'):
@@ -464,17 +595,21 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                 if user_data['user_preferred_name'] and user_data.get('script_progress', 0) % 3 == 0:
                     response = f"{user_data['user_preferred_name']}, {response}"
             # Generate AI-enhanced response (but strictly use the script prompt as main message)
-            system_prompt = self._build_system_prompt(user_data)
-            ai_response = self.openai_client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"User said: {user_message}\n\nCoach should respond with: {response}\n\nStrictly use the provided script prompt as the main message. Do not add 'dear', 'my dear', or similar terms. Only build gently on the script prompt if needed. Only branch to intervention if keywords are detected."}
-                ],
-                max_tokens=300,
-                temperature=0.7
-            )
-            enhanced_response = ai_response.choices[0].message.content
+            # Skip AI enhancement for interventions to preserve structured content
+            if user_data.get('current_stage') == 'intervention':
+                enhanced_response = response
+            else:
+                system_prompt = self._build_system_prompt(user_data)
+                ai_response = self.openai_client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": f"User said: {user_message}\n\nCoach should respond with: {response}\n\nStrictly use the provided script prompt as the main message. Do not add 'dear', 'my dear', or similar terms. Only build gently on the script prompt if needed. Only branch to intervention if keywords are detected."}
+                    ],
+                    max_tokens=300,
+                    temperature=0.7
+                )
+                enhanced_response = ai_response.choices[0].message.content
             user_data['last_coach_message'] = enhanced_response
             user_data['last_updated'] = datetime.now().isoformat()
             return {
@@ -522,11 +657,55 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                     reminders.append({
                         'id': item['id'],
                         'type': item['type'],
-                        'message': f"Hi there! I wanted to gently remind you about the {item['type']} we discussed. {item['description']}",
+                        'title': item.get('title', 'Practice Reminder'),
+                        'message': self._create_reminder_message(item),
                         'action_item': item
                     })
         
         return reminders
+    
+    def _create_reminder_message(self, action_item: Dict) -> str:
+        """Create a personalized reminder message for an action item"""
+        title = action_item.get('title', 'Practice')
+        description = action_item.get('description', '')
+        
+        if action_item['type'] == 'self_guided':
+            if 'reflection' in action_item.get('title', '').lower():
+                return f"Hi there! 🌟 Just a gentle reminder about your reflection practice: {title}. Take a few moments when you're ready - there's no rush. Remember, this is about witnessing your experience honestly."
+            elif 'reclaiming' in action_item.get('title', '').lower():
+                return f"Hello! 💫 Wondering how your reclaiming practice is going? {title}. Remember, this is about making something yours again - no pressure, just gentle exploration."
+            elif 'journal' in action_item.get('title', '').lower():
+                return f"Hi! 📝 How's your weekly journal practice feeling? {title}. Even one question answered is progress. You're doing great!"
+        else:
+            return f"Hi there! Just a gentle reminder about: {title}. {description}"
+    
+    def send_follow_up_checkin(self, user_data: Dict, action_item_id: str) -> str:
+        """Send a follow-up check-in for a completed action item"""
+        if 'action_items' not in user_data:
+            return None
+        
+        for item in user_data['action_items']:
+            if item.get('id') == action_item_id:
+                follow_up_question = item.get('follow_up_question', '')
+                if follow_up_question:
+                    return f"Hi there! I wanted to check in about your practice: {item.get('title', '')}. {follow_up_question}"
+                break
+        
+        return None
+    
+    def get_daily_journal_prompt(self, user_data: Dict, day_number: int) -> str:
+        """Get the daily journal prompt for a specific day"""
+        if 'action_items' not in user_data:
+            return None
+        
+        for item in user_data['action_items']:
+            if item['type'] == 'self_guided' and 'journal' in item.get('title', '').lower():
+                daily_prompts = item.get('daily_prompts', [])
+                if 0 <= day_number - 1 < len(daily_prompts):
+                    return f"Day {day_number} Journal Prompt: {daily_prompts[day_number - 1]}"
+                break
+        
+        return None
     
     def mark_action_item_completed(self, user_data: Dict, action_item_id: str):
         """Mark an action item as completed"""
