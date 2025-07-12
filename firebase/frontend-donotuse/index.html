@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIYAsaathi - Your Loneliness Coach</title>
+    <title>NIYAsaathi - Your Empathetic Loneliness Coach</title>
+    <meta name="description" content="Connect with NIYAsaathi, your empathetic AI coach designed to help you navigate loneliness with compassion and understanding.">
+    <meta name="keywords" content="loneliness, mental health, AI coach, therapy, support, emotional wellness">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="NIYAsaathi - Your Empathetic Loneliness Coach">
+    <meta property="og:description" content="Connect with NIYAsaathi, your empathetic AI coach designed to help you navigate loneliness with compassion and understanding.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://niyasaathi.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -19,18 +38,100 @@
 </head>
 <body>
     <div id="app">
+        <!-- Landing Screen -->
+        <div id="landing-screen" class="screen active">
+            <div class="landing-container">
+                <div class="landing-header">
+                    <div class="logo">
+                        <div class="logo-icon">💜</div>
+                        <h1>NIYAsaathi</h1>
+                    </div>
+                    <p class="tagline">Your empathetic loneliness coach</p>
+                </div>
+                
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h2>You don't have to face loneliness alone</h2>
+                        <p>Connect with NIYAsaathi, an AI coach designed with compassion and understanding to help you navigate feelings of loneliness and find connection within yourself.</p>
+                        
+                        <div class="features">
+                            <div class="feature">
+                                <i class="fas fa-heart"></i>
+                                <span>Empathetic conversations</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Safe, judgment-free space</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>Available 24/7</span>
+                            </div>
+                        </div>
+                        
+                        <button id="start-journey" class="btn-primary">
+                            <span>Start Your Journey</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="hero-visual">
+                        <div class="chat-preview">
+                            <div class="chat-message coach">
+                                <div class="message-avatar">💜</div>
+                                <div class="message-content">
+                                    <p>Hi there. I'm NIYAsaathi. How are you feeling today?</p>
+                                </div>
+                            </div>
+                            <div class="chat-message user">
+                                <div class="message-content">
+                                    <p>I've been feeling quite lonely lately...</p>
+                                </div>
+                                <div class="message-avatar">👤</div>
+                            </div>
+                            <div class="chat-message coach">
+                                <div class="message-avatar">💜</div>
+                                <div class="message-content">
+                                    <p>I hear you. Loneliness can be really difficult. Would you like to tell me more about what you're experiencing?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="trust-indicators">
+                    <div class="trust-item">
+                        <i class="fas fa-lock"></i>
+                        <span>Private & Secure</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-user-shield"></i>
+                        <span>No Personal Data Stored</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Compassionate Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Authentication Screen -->
-        <div id="auth-screen" class="screen active">
+        <div id="auth-screen" class="screen">
             <div class="auth-container">
-                <div class="logo">
-                    <i class="fas fa-heart"></i>
-                    <h1>NIYAsaathi</h1>
-                    <p>Your empathetic loneliness coach</p>
+                <div class="auth-header">
+                    <button id="back-to-landing" class="btn-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="logo">
+                        <div class="logo-icon">💜</div>
+                        <h1>NIYAsaathi</h1>
+                    </div>
                 </div>
                 
                 <div class="auth-form">
-                    <h2>Welcome</h2>
-                    <p>Enter your phone number to start your journey</p>
+                    <h2>Welcome to NIYAsaathi</h2>
+                    <p>Enter your phone number to start your journey of self-discovery and connection</p>
                     
                     <div class="phone-input">
                         <input type="tel" id="phone-number" placeholder="+1 (555) 123-4567" maxlength="15">
@@ -44,7 +145,7 @@
                         <input type="text" id="verification-code" placeholder="Enter 6-digit code" maxlength="6">
                         <button id="verify-code" class="btn-primary">
                             <i class="fas fa-check"></i>
-                            Verify
+                            Verify & Continue
                         </button>
                     </div>
                     
@@ -59,7 +160,7 @@
                 <div class="header-content">
                     <div class="coach-info">
                         <div class="coach-avatar">
-                            <i class="fas fa-heart"></i>
+                            <span>💜</span>
                         </div>
                         <div class="coach-details">
                             <h3>NIYAsaathi</h3>
@@ -104,7 +205,7 @@
                     <div class="text-input-wrapper">
                         <textarea 
                             id="message-input" 
-                            placeholder="Type your message..." 
+                            placeholder="Share what's on your mind..." 
                             rows="1"
                             maxlength="500"
                         ></textarea>

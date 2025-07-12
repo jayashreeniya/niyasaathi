@@ -13,7 +13,16 @@ import requests
 sys.path.append('../agent')
 from ai_agent import NIYAsaathiAgent
 from nudge_system import NudgeSystem
-from azure_tts import synthesize_speech
+# Optional Azure TTS import
+try:
+    from azure_tts import synthesize_speech
+    AZURE_TTS_AVAILABLE = True
+except ImportError:
+    print("Warning: Azure TTS not available. Speech synthesis will be disabled.")
+    AZURE_TTS_AVAILABLE = False
+    def synthesize_speech(text, filename):
+        print(f"Speech synthesis requested for: {text}")
+        return None
 
 # Load environment variables
 load_dotenv()
@@ -44,14 +53,17 @@ except Exception as e:
 try:
     openai_api_key = os.environ.get('OPENAI_API_KEY')
     if openai_api_key:
+        print(f"Found OpenAI API key: {openai_api_key[:10]}...")
         ai_agent = NIYAsaathiAgent(openai_api_key)
         nudge_system = NudgeSystem()
+        print("✅ AI Agent initialized successfully")
     else:
         ai_agent = None
         nudge_system = None
         print("Warning: OPENAI_API_KEY not found. AI features will be limited.")
 except Exception as e:
     print(f"AI Agent initialization error: {e}")
+    print("Continuing without AI agent for now...")
     ai_agent = None
     nudge_system = None
 
@@ -568,6 +580,10 @@ def speak():
     text = data.get('text')
     if not text:
         return jsonify({'error': 'No text provided'}), 400
+    
+    if not AZURE_TTS_AVAILABLE:
+        return jsonify({'error': 'Speech synthesis not available'}), 503
+    
     filename = synthesize_speech(text, "response.wav")
     if filename:
         return send_file(filename, mimetype="audio/wav")

@@ -1,475 +1,636 @@
-// NIYAsaathi Frontend Application
+// Frontend JavaScript placeholder
+
 class NIYAsaathiApp {
     constructor() {
+        this.currentUser = null;
+        this.userData = null;
+        this.isAuthenticated = false;
+        this.voiceEnabled = false;
+        this.voiceOutputEnabled = true;
+        this.voiceSpeed = 1.0;
+        this.speechRecognition = null;
+        this.speechSynthesis = window.speechSynthesis;
         this.isRecording = false;
-        this.mediaRecorder = null;
-        this.audioChunks = [];
-        this.conversationHistory = [];
-        this.userData = {};
-        this.conversationState = {};
-        this.isProcessing = false;
+        this.isTyping = false;
         
-        // Firebase Functions base URL (will be set during deployment)
-        this.apiBaseUrl = window.location.hostname === 'localhost' 
-            ? 'http://localhost:5001/your-project-id/us-central1/api'
-            : 'https://us-central1-your-project-id.cloudfunctions.net/api';
+        this.API_BASE_URL = 'http://localhost:5000'; // Update with your backend URL
         
-        this.initializeApp();
+        this.init();
     }
     
-    initializeApp() {
+    init() {
         this.setupEventListeners();
-        this.loadConversationHistory();
-        this.showWelcomeMessage();
+        this.checkAuthentication();
+        this.setupVoice();
+        this.loadSettings();
     }
     
     setupEventListeners() {
-        // Microphone button
-        const micButton = document.getElementById('micButton');
-        if (micButton) {
-            micButton.addEventListener('click', () => this.toggleRecording());
-        }
+        // Authentication
+        document.getElementById('send-code').addEventListener('click', () => this.sendVerificationCode());
+        document.getElementById('verify-code').addEventListener('click', () => this.verifyCode());
+        document.getElementById('phone-number').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendVerificationCode();
+        });
+        document.getElementById('verification-code').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.verifyCode();
+        });
         
-        // Send button
-        const sendButton = document.getElementById('sendButton');
-        if (sendButton) {
-            sendButton.addEventListener('click', () => this.sendTextMessage());
-        }
+        // Chat
+        document.getElementById('send-btn').addEventListener('click', () => this.sendMessage());
+        document.getElementById('message-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage();
+            }
+        });
+        document.getElementById('message-input').addEventListener('input', () => this.updateSendButton());
         
-        // Text input
-        const textInput = document.getElementById('textInput');
-        if (textInput) {
-            textInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    this.sendTextMessage();
+        // Voice
+        document.getElementById('voice-input-btn').addEventListener('click', () => this.toggleVoiceInput());
+        document.getElementById('stop-voice').addEventListener('click', () => this.stopVoiceInput());
+        document.getElementById('voice-toggle').addEventListener('click', () => this.toggleVoiceOutput());
+        
+        // Settings
+        document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
+        document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
+        document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+        document.getElementById('voice-output-toggle').addEventListener('change', (e) => {
+            this.voiceOutputEnabled = e.target.checked;
+            this.saveSettings();
+        });
+        document.getElementById('voice-speed').addEventListener('change', (e) => {
+            this.voiceSpeed = parseFloat(e.target.value);
+            this.saveSettings();
+        });
+        
+        // History
+        document.getElementById('history-btn').addEventListener('click', () => this.showHistory());
+        document.getElementById('close-history').addEventListener('click', () => this.hideHistory());
+        
+        // Voice permission
+        document.getElementById('allow-voice').addEventListener('click', () => this.requestVoicePermission());
+        document.getElementById('deny-voice').addEventListener('click', () => this.hideVoicePermissionModal());
+        
+        // Modal close on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
                 }
             });
-        }
-        
-        // History button
-        const historyButton = document.getElementById('historyButton');
-        if (historyButton) {
-            historyButton.addEventListener('click', () => this.toggleHistoryModal());
-        }
-        
-        // Close history modal
-        const closeHistoryBtn = document.querySelector('.close-history');
-        if (closeHistoryBtn) {
-            closeHistoryBtn.addEventListener('click', () => this.toggleHistoryModal());
-        }
-        
-        // Click outside modal to close
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('historyModal');
-            if (e.target === modal) {
-                this.toggleHistoryModal();
-            }
         });
     }
     
-    showWelcomeMessage() {
-        const welcomeMessage = {
-            type: 'assistant',
-            content: "Hello! I'm NIYAsaathi, your AI companion for loneliness support. I'm here to listen, understand, and help you navigate through feelings of loneliness. How are you feeling today?",
-            timestamp: new Date().toISOString()
-        };
+    checkAuthentication() {
+        const token = localStorage.getItem('niyasaathi_token');
+        const userData = localStorage.getItem('niyasaathi_user');
         
-        this.addMessageToChat(welcomeMessage);
-        this.conversationHistory.push(welcomeMessage);
-        this.saveConversationHistory();
-    }
-    
-    async toggleRecording() {
-        if (this.isRecording) {
-            this.stopRecording();
-        } else {
-            await this.startRecording();
-        }
-    }
-    
-    async startRecording() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            this.mediaRecorder = new MediaRecorder(stream);
-            this.audioChunks = [];
-            
-            this.mediaRecorder.ondataavailable = (event) => {
-                this.audioChunks.push(event.data);
-            };
-            
-            this.mediaRecorder.onstop = async () => {
-                const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
-                await this.processAudioMessage(audioBlob);
-            };
-            
-            this.mediaRecorder.start();
-            this.isRecording = true;
-            this.updateMicButton(true);
-            
-        } catch (error) {
-            console.error('Error starting recording:', error);
-            this.showError('Could not access microphone. Please check permissions.');
-        }
-    }
-    
-    stopRecording() {
-        if (this.mediaRecorder && this.isRecording) {
-            this.mediaRecorder.stop();
-            this.mediaRecorder.stream.getTracks().forEach(track => track.stop());
-            this.isRecording = false;
-            this.updateMicButton(false);
-        }
-    }
-    
-    updateMicButton(isRecording) {
-        const micButton = document.getElementById('micButton');
-        if (micButton) {
-            if (isRecording) {
-                micButton.innerHTML = '<i class="fas fa-stop"></i>';
-                micButton.classList.add('recording');
-            } else {
-                micButton.innerHTML = '<i class="fas fa-microphone"></i>';
-                micButton.classList.remove('recording');
+        if (token && userData) {
+            try {
+                this.currentUser = JSON.parse(userData);
+                this.isAuthenticated = true;
+                this.showChatScreen();
+                this.loadUserData();
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+                this.logout();
             }
         }
     }
     
-    async processAudioMessage(audioBlob) {
-        try {
-            this.setProcessing(true);
-            
-            // Convert audio to text (you can integrate with Azure Speech Services here)
-            const text = await this.audioToText(audioBlob);
-            
-            if (text) {
-                await this.sendMessage(text);
-            } else {
-                this.showError('Could not understand audio. Please try again.');
-            }
-            
-        } catch (error) {
-            console.error('Error processing audio:', error);
-            this.showError('Error processing audio message.');
-        } finally {
-            this.setProcessing(false);
-        }
-    }
-    
-    async audioToText(audioBlob) {
-        // For now, return a placeholder
-        // In production, integrate with Azure Speech Services or other speech-to-text service
-        return "Hello, this is a test message from audio input.";
-    }
-    
-    async sendTextMessage() {
-        const textInput = document.getElementById('textInput');
-        const message = textInput.value.trim();
+    async sendVerificationCode() {
+        const phoneNumber = document.getElementById('phone-number').value.trim();
         
-        if (!message || this.isProcessing) return;
-        
-        textInput.value = '';
-        await this.sendMessage(message);
-    }
-    
-    async sendMessage(message) {
-        try {
-            this.setProcessing(true);
-            
-            // Add user message to chat
-            const userMessage = {
-                type: 'user',
-                content: message,
-                timestamp: new Date().toISOString()
-            };
-            
-            this.addMessageToChat(userMessage);
-            this.conversationHistory.push(userMessage);
-            
-            // Send to Firebase Functions
-            const response = await this.callAPI('/chat', {
-                message: message,
-                user_data: this.userData
-            });
-            
-            if (response.success) {
-                // Update user data and conversation state
-                this.userData = response.user_data || {};
-                this.conversationState = response.conversation_state || {};
-                
-                // Add assistant response to chat
-                const assistantMessage = {
-                    type: 'assistant',
-                    content: response.message,
-                    timestamp: new Date().toISOString()
-                };
-                
-                this.addMessageToChat(assistantMessage);
-                this.conversationHistory.push(assistantMessage);
-                
-                // Handle text-to-speech if needed
-                if (response.should_speak) {
-                    await this.speakText(response.message);
-                }
-                
-                // Handle intervention data
-                if (response.intervention_data) {
-                    this.handleInterventionData(response.intervention_data);
-                }
-                
-            } else {
-                this.showError(response.error || 'Failed to get response');
-            }
-            
-        } catch (error) {
-            console.error('Error sending message:', error);
-            this.showError('Failed to send message. Please try again.');
-        } finally {
-            this.setProcessing(false);
+        if (!phoneNumber) {
+            this.showAuthStatus('Please enter a phone number', 'error');
+            return;
         }
-    }
-    
-    async callAPI(endpoint, data) {
+        
+        if (!this.isValidPhoneNumber(phoneNumber)) {
+            this.showAuthStatus('Please enter a valid phone number', 'error');
+            return;
+        }
+        
+        const sendBtn = document.getElementById('send-code');
+        const originalText = sendBtn.innerHTML;
+        sendBtn.disabled = true;
+        sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        
         try {
-            const response = await fetch(`${this.apiBaseUrl}${endpoint}`, {
+            const response = await fetch(`${this.API_BASE_URL}/auth/send-code`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ phone_number: phoneNumber })
             });
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            const data = await response.json();
             
-            return await response.json();
-            
-        } catch (error) {
-            console.error('API call failed:', error);
-            throw error;
-        }
-    }
-    
-    async speakText(text) {
-        try {
-            const response = await this.callAPI('/speak', { text });
-            
-            if (response.success) {
-                // In production, integrate with Azure Speech Services
-                // For now, use browser's built-in speech synthesis
-                if ('speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.rate = 0.9;
-                    utterance.pitch = 1.1;
-                    utterance.volume = 0.8;
-                    
-                    // Try to find an Indian female voice
-                    const voices = speechSynthesis.getVoices();
-                    const indianVoice = voices.find(voice => 
-                        voice.lang.includes('en-IN') || 
-                        voice.name.toLowerCase().includes('indian') ||
-                        voice.name.toLowerCase().includes('priya') ||
-                        voice.name.toLowerCase().includes('neha')
-                    );
-                    
-                    if (indianVoice) {
-                        utterance.voice = indianVoice;
-                    }
-                    
-                    speechSynthesis.speak(utterance);
-                }
+            if (response.ok) {
+                this.showAuthStatus('Verification code sent!', 'success');
+                document.querySelector('.phone-input').style.display = 'none';
+                document.querySelector('.verification-input').style.display = 'flex';
+                document.getElementById('verification-code').focus();
+            } else {
+                this.showAuthStatus(data.error || 'Failed to send code', 'error');
             }
         } catch (error) {
-            console.error('Error with text-to-speech:', error);
+            console.error('Error sending code:', error);
+            this.showAuthStatus('Network error. Please try again.', 'error');
+        } finally {
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = originalText;
         }
     }
     
-    handleInterventionData(interventionData) {
-        if (interventionData.completed) {
-            // Show completion message or progress indicator
-            console.log('Intervention completed:', interventionData.type);
-        } else if (interventionData.stage !== undefined) {
-            // Show progress indicator
-            this.showProgressIndicator(interventionData.stage, interventionData.total_stages);
-        }
-    }
-    
-    showProgressIndicator(currentStage, totalStages) {
-        const progress = (currentStage / totalStages) * 100;
+    async verifyCode() {
+        const phoneNumber = document.getElementById('phone-number').value.trim();
+        const code = document.getElementById('verification-code').value.trim();
         
-        // You can add a progress bar or indicator here
-        console.log(`Intervention progress: ${progress}%`);
-    }
-    
-    addMessageToChat(message) {
-        const chatContainer = document.getElementById('chatContainer');
-        if (!chatContainer) return;
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${message.type}-message`;
-        
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'message-content';
-        contentDiv.textContent = message.content;
-        
-        const timeDiv = document.createElement('div');
-        timeDiv.className = 'message-time';
-        timeDiv.textContent = this.formatTime(message.timestamp);
-        
-        messageDiv.appendChild(contentDiv);
-        messageDiv.appendChild(timeDiv);
-        
-        chatContainer.appendChild(messageDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-    
-    formatTime(timestamp) {
-        const date = new Date(timestamp);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    
-    setProcessing(isProcessing) {
-        this.isProcessing = isProcessing;
-        
-        const sendButton = document.getElementById('sendButton');
-        const textInput = document.getElementById('textInput');
-        const micButton = document.getElementById('micButton');
-        
-        if (sendButton) {
-            sendButton.disabled = isProcessing;
-            sendButton.innerHTML = isProcessing ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-paper-plane"></i>';
-        }
-        
-        if (textInput) {
-            textInput.disabled = isProcessing;
-        }
-        
-        if (micButton) {
-            micButton.disabled = isProcessing;
-        }
-    }
-    
-    showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        
-        const chatContainer = document.getElementById('chatContainer');
-        if (chatContainer) {
-            chatContainer.appendChild(errorDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            
-            // Remove error message after 5 seconds
-            setTimeout(() => {
-                errorDiv.remove();
-            }, 5000);
-        }
-    }
-    
-    toggleHistoryModal() {
-        const modal = document.getElementById('historyModal');
-        if (modal) {
-            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-            
-            if (modal.style.display === 'block') {
-                this.loadConversationHistory();
-            }
-        }
-    }
-    
-    loadConversationHistory() {
-        const savedHistory = localStorage.getItem('niyasaathi_conversation_history');
-        if (savedHistory) {
-            try {
-                this.conversationHistory = JSON.parse(savedHistory);
-            } catch (error) {
-                console.error('Error loading conversation history:', error);
-                this.conversationHistory = [];
-            }
-        }
-        
-        this.displayHistoryInModal();
-    }
-    
-    displayHistoryInModal() {
-        const historyContainer = document.getElementById('historyContainer');
-        if (!historyContainer) return;
-        
-        historyContainer.innerHTML = '';
-        
-        if (this.conversationHistory.length === 0) {
-            historyContainer.innerHTML = '<p class="no-history">No conversation history yet.</p>';
+        if (!code) {
+            this.showAuthStatus('Please enter the verification code', 'error');
             return;
         }
         
-        // Group conversations by date
-        const groupedHistory = this.groupConversationsByDate(this.conversationHistory);
+        const verifyBtn = document.getElementById('verify-code');
+        const originalText = verifyBtn.innerHTML;
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
         
-        Object.keys(groupedHistory).forEach(date => {
-            const dateDiv = document.createElement('div');
-            dateDiv.className = 'history-date-group';
-            
-            const dateHeader = document.createElement('h3');
-            dateHeader.textContent = this.formatDate(date);
-            dateDiv.appendChild(dateHeader);
-            
-            groupedHistory[date].forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `history-message ${message.type}-message`;
-                
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'history-content';
-                contentDiv.textContent = message.content;
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'history-time';
-                timeDiv.textContent = this.formatTime(message.timestamp);
-                
-                messageDiv.appendChild(contentDiv);
-                messageDiv.appendChild(timeDiv);
-                dateDiv.appendChild(messageDiv);
+        try {
+            const response = await fetch(`${this.API_BASE_URL}/auth/verify-code`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    phone_number: phoneNumber,
+                    code: code 
+                })
             });
             
-            historyContainer.appendChild(dateDiv);
+            const data = await response.json();
+            
+            if (response.ok) {
+                this.currentUser = data.user;
+                localStorage.setItem('niyasaathi_token', data.token);
+                localStorage.setItem('niyasaathi_user', JSON.stringify(data.user));
+                this.isAuthenticated = true;
+                
+                this.showAuthStatus('Welcome to NIYAsaathi!', 'success');
+                setTimeout(() => {
+                    this.showChatScreen();
+                    this.loadUserData();
+                }, 1000);
+            } else {
+                this.showAuthStatus(data.error || 'Invalid verification code', 'error');
+            }
+        } catch (error) {
+            console.error('Error verifying code:', error);
+            this.showAuthStatus('Network error. Please try again.', 'error');
+        } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.innerHTML = originalText;
+        }
+    }
+    
+    showAuthStatus(message, type) {
+        const statusEl = document.getElementById('auth-status');
+        statusEl.textContent = message;
+        statusEl.className = `auth-status ${type}`;
+    }
+    
+    isValidPhoneNumber(phone) {
+        // Basic phone number validation
+        const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+        return phoneRegex.test(phone);
+    }
+    
+    showChatScreen() {
+        document.getElementById('auth-screen').classList.remove('active');
+        document.getElementById('chat-screen').classList.add('active');
+        document.getElementById('user-phone').textContent = this.currentUser.phone_number;
+        
+        // Show welcome message
+        this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?');
+    }
+    
+    async loadUserData() {
+        try {
+            const response = await fetch(`${this.API_BASE_URL}/user/data`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
+                }
+            });
+            
+            if (response.ok) {
+                this.userData = await response.json();
+                // Resume conversation from where user left off
+                if (this.userData.last_coach_message) {
+                    this.addMessage('coach', this.userData.last_coach_message);
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user data:', error);
+        }
+    }
+    
+    async sendMessage() {
+        const input = document.getElementById('message-input');
+        const message = input.value.trim();
+        
+        if (!message || this.isTyping) return;
+        
+        // Add user message to chat
+        this.addMessage('user', message);
+        input.value = '';
+        this.updateSendButton();
+        
+        // Show typing indicator
+        this.showTypingIndicator();
+        
+        try {
+            const response = await fetch(`${this.API_BASE_URL}/chat`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
+                },
+                body: JSON.stringify({
+                    user_id: this.currentUser.id,
+                    message: message
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                this.hideTypingIndicator();
+                this.addMessage('coach', data.text, true); // pass true to trigger backend audio
+                
+                // Update user data
+                this.userData = data.user_data;
+                
+                // Schedule nudge if intervention was provided
+                if (data.intervention_type) {
+                    this.scheduleNudge(data.intervention_type);
+                }
+            } else {
+                this.hideTypingIndicator();
+                this.addMessage('coach', 'I apologize, but I\'m having trouble processing your message right now. Please try again in a moment.');
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            this.hideTypingIndicator();
+            this.addMessage('coach', 'I\'m experiencing some technical difficulties. Please try again in a moment.');
+        }
+    }
+    
+    addMessage(sender, text, playBackendAudio = false) {
+        const messagesContainer = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        messageDiv.innerHTML = `
+            <div class="message-avatar">
+                ${sender === 'coach' ? '<i class="fas fa-heart"></i>' : '<i class="fas fa-user"></i>'}
+            </div>
+            <div class="message-content">
+                <div class="message-text">${this.formatMessage(text)}</div>
+                <div class="message-time">${time}</div>
+            </div>
+        `;
+        
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+        // Play backend audio if enabled and it's from coach
+        if (sender === 'coach' && this.voiceOutputEnabled && playBackendAudio) {
+            fetch(`${this.API_BASE_URL}/speak`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            })
+            .then(res => res.blob())
+            .then(blob => {
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            });
+        }
+        // Remove or comment out browser TTS
+        // if (sender === 'coach' && this.voiceOutputEnabled) {
+        //     this.speakMessage(text);
+        // }
+    }
+    
+    formatMessage(text) {
+        // Convert line breaks to <br> tags and escape HTML
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .replace(/\n/g, '<br>');
+    }
+    
+    showTypingIndicator() {
+        this.isTyping = true;
+        document.getElementById('typing-indicator').style.display = 'flex';
+        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+    }
+    
+    hideTypingIndicator() {
+        this.isTyping = false;
+        document.getElementById('typing-indicator').style.display = 'none';
+    }
+    
+    updateSendButton() {
+        const input = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        sendBtn.disabled = !input.value.trim() || this.isTyping;
+    }
+    
+    // Voice functionality
+    setupVoice() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.speechRecognition = new SpeechRecognition();
+            this.speechRecognition.continuous = false;
+            this.speechRecognition.interimResults = false;
+            this.speechRecognition.lang = 'en-US';
+            
+            this.speechRecognition.onstart = () => {
+                this.isRecording = true;
+                document.getElementById('voice-input-btn').classList.add('recording');
+                document.getElementById('voice-status').style.display = 'flex';
+            };
+            
+            this.speechRecognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('message-input').value = transcript;
+                this.updateSendButton();
+            };
+            
+            this.speechRecognition.onend = () => {
+                this.isRecording = false;
+                document.getElementById('voice-input-btn').classList.remove('recording');
+                document.getElementById('voice-status').style.display = 'none';
+            };
+            
+            this.speechRecognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                this.isRecording = false;
+                document.getElementById('voice-input-btn').classList.remove('recording');
+                document.getElementById('voice-status').style.display = 'none';
+            };
+            
+            this.voiceEnabled = true;
+        }
+    }
+    
+    toggleVoiceInput() {
+        if (!this.voiceEnabled) {
+            this.showVoicePermissionModal();
+            return;
+        }
+        
+        if (this.isRecording) {
+            this.stopVoiceInput();
+        } else {
+            this.startVoiceInput();
+        }
+    }
+    
+    startVoiceInput() {
+        if (this.speechRecognition) {
+            this.speechRecognition.start();
+        }
+    }
+    
+    stopVoiceInput() {
+        if (this.speechRecognition) {
+            this.speechRecognition.stop();
+        }
+    }
+    
+    toggleVoiceOutput() {
+        this.voiceOutputEnabled = !this.voiceOutputEnabled;
+        const btn = document.getElementById('voice-toggle');
+        btn.classList.toggle('active', this.voiceOutputEnabled);
+    }
+    
+    speakMessage(text) {
+        if (this.speechSynthesis && this.voiceOutputEnabled) {
+            // Cancel any ongoing speech
+            this.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = this.voiceSpeed;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.8;
+            
+            // Try to use a female voice for NIYAsaathi
+            const voices = this.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(voice => 
+                voice.lang.includes('en') && 
+                (voice.name.includes('female') || voice.name.includes('Samantha') || voice.name.includes('Victoria'))
+            );
+            
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            }
+            
+            this.speechSynthesis.speak(utterance);
+        }
+    }
+    
+    showVoicePermissionModal() {
+        document.getElementById('voice-permission-modal').classList.add('active');
+    }
+    
+    hideVoicePermissionModal() {
+        document.getElementById('voice-permission-modal').classList.remove('active');
+    }
+    
+    async requestVoicePermission() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            this.voiceEnabled = true;
+            this.hideVoicePermissionModal();
+            this.startVoiceInput();
+        } catch (error) {
+            console.error('Error requesting microphone permission:', error);
+            this.hideVoicePermissionModal();
+        }
+    }
+    
+    // Settings
+    showSettings() {
+        document.getElementById('settings-modal').classList.add('active');
+    }
+    
+    hideSettings() {
+        document.getElementById('settings-modal').classList.remove('active');
+    }
+    
+    loadSettings() {
+        const settings = JSON.parse(localStorage.getItem('niyasaathi_settings') || '{}');
+        this.voiceOutputEnabled = settings.voiceOutputEnabled !== undefined ? settings.voiceOutputEnabled : true;
+        this.voiceSpeed = settings.voiceSpeed || 1.0;
+        
+        document.getElementById('voice-output-toggle').checked = this.voiceOutputEnabled;
+        document.getElementById('voice-speed').value = this.voiceSpeed;
+        document.getElementById('voice-toggle').classList.toggle('active', this.voiceOutputEnabled);
+    }
+    
+    saveSettings() {
+        const settings = {
+            voiceOutputEnabled: this.voiceOutputEnabled,
+            voiceSpeed: this.voiceSpeed
+        };
+        localStorage.setItem('niyasaathi_settings', JSON.stringify(settings));
+    }
+    
+    async scheduleNudge(interventionType) {
+        try {
+            await fetch(`${this.API_BASE_URL}/register_nudge`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
+                },
+                body: JSON.stringify({
+                    user_id: this.currentUser.id,
+                    intervention_type: interventionType
+                })
+            });
+        } catch (error) {
+            console.error('Error scheduling nudge:', error);
+        }
+    }
+    
+    logout() {
+        localStorage.removeItem('niyasaathi_token');
+        localStorage.removeItem('niyasaathi_user');
+        this.currentUser = null;
+        this.userData = null;
+        this.isAuthenticated = false;
+        
+        document.getElementById('chat-screen').classList.remove('active');
+        document.getElementById('auth-screen').classList.add('active');
+        document.getElementById('chat-messages').innerHTML = '';
+        document.getElementById('phone-number').value = '';
+        document.getElementById('verification-code').value = '';
+        document.querySelector('.phone-input').style.display = 'flex';
+        document.querySelector('.verification-input').style.display = 'none';
+        document.getElementById('auth-status').textContent = '';
+        document.getElementById('auth-status').className = 'auth-status';
+        
+        this.hideSettings();
+    }
+    
+    // History
+    showHistory() {
+        this.loadHistory();
+        document.getElementById('history-modal').classList.add('active');
+    }
+    
+    hideHistory() {
+        document.getElementById('history-modal').classList.remove('active');
+    }
+    
+    loadHistory() {
+        const historyContainer = document.getElementById('history-container');
+        
+        if (!this.userData || !this.userData.conversation_history || this.userData.conversation_history.length === 0) {
+            historyContainer.innerHTML = `
+                <div class="history-empty">
+                    <i class="fas fa-history"></i>
+                    <p>No conversation history yet</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const history = this.userData.conversation_history;
+        const groupedHistory = this.groupHistoryByDate(history);
+        
+        historyContainer.innerHTML = '';
+        
+        Object.keys(groupedHistory).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
+            const dayHistory = groupedHistory[date];
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            const lastMessage = dayHistory[dayHistory.length - 1];
+            const preview = lastMessage.user_message || lastMessage.coach_message || 'Conversation';
+            const messageCount = dayHistory.length;
+            
+            historyItem.innerHTML = `
+                <div class="history-item-header">
+                    <span class="history-item-date">${formattedDate}</span>
+                    <span class="history-item-time">${messageCount} messages</span>
+                </div>
+                <div class="history-item-preview">${this.truncateText(preview, 100)}</div>
+            `;
+            
+            historyItem.addEventListener('click', () => {
+                this.loadHistoryConversation(dayHistory);
+            });
+            
+            historyContainer.appendChild(historyItem);
         });
     }
     
-    groupConversationsByDate(conversations) {
+    groupHistoryByDate(history) {
         const grouped = {};
         
-        conversations.forEach(message => {
-            const date = new Date(message.timestamp).toDateString();
+        history.forEach(entry => {
+            const date = new Date(entry.timestamp).toDateString();
             if (!grouped[date]) {
                 grouped[date] = [];
             }
-            grouped[date].push(message);
+            grouped[date].push(entry);
         });
         
         return grouped;
     }
     
-    formatDate(dateString) {
-        const date = new Date(dateString);
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-        
-        if (date.toDateString() === today.toDateString()) {
-            return 'Today';
-        } else if (date.toDateString() === yesterday.toDateString()) {
-            return 'Yesterday';
-        } else {
-            return date.toLocaleDateString();
-        }
+    truncateText(text, maxLength) {
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
     }
     
-    saveConversationHistory() {
-        try {
-            localStorage.setItem('niyasaathi_conversation_history', JSON.stringify(this.conversationHistory));
-        } catch (error) {
-            console.error('Error saving conversation history:', error);
-        }
+    loadHistoryConversation(dayHistory) {
+        // Clear current chat
+        document.getElementById('chat-messages').innerHTML = '';
+        
+        // Add historical messages
+        dayHistory.forEach(entry => {
+            if (entry.coach_message) {
+                this.addMessage('coach', entry.coach_message, false);
+            }
+            if (entry.user_message) {
+                this.addMessage('user', entry.user_message, false);
+            }
+        });
+        
+        this.hideHistory();
     }
 }
 
@@ -477,3 +638,29 @@ class NIYAsaathiApp {
 document.addEventListener('DOMContentLoaded', () => {
     new NIYAsaathiApp();
 });
+
+function sendMessage(userInput) {
+  fetch('http://localhost:5000/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: userInput })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Display the text
+    document.getElementById('response').innerText = data.text;
+
+    // Play the audio
+    fetch('http://localhost:5000/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: data.text })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.play();
+    });
+  });
+}
