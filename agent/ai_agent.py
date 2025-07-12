@@ -260,13 +260,8 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                 user_data['branch'] = 'low_self_worth'
                 return 'intervention_low_self_worth'
         
-        # Check for branch triggers in user response (existing logic)
-        if current_branch == 'general':
-            # Look for relationship-related keywords
-            relationship_keywords = ['breakup', 'divorce', 'separation', 'lost', 'ended', 'relationship', 'partner', 'spouse', 'ex']
-            if any(keyword in user_response.lower() for keyword in relationship_keywords):
-                user_data['branch'] = 'relationship_loss'
-                return 'intervention_relationship_loss'
+        # Note: Branching to interventions should only happen after completing follow-up questions
+        # This early branching logic has been removed to ensure proper flow
         
         # Move to next script item
         next_progress = current_progress + 1
@@ -384,7 +379,11 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                 return self._get_intervention_stage(intervention_type, next_stage_index)
             else:
                 # Skip to closing stage
-                return self._get_intervention_stage(intervention_type, len(intervention['intervention_stages']) - 1)
+                if intervention_type in self.interventions:
+                    intervention = self.interventions[intervention_type]
+                    if 'intervention_stages' in intervention:
+                        return self._get_intervention_stage(intervention_type, len(intervention['intervention_stages']) - 1)
+                return None
         
         return None
     
@@ -562,16 +561,21 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                             if 'intervention_stages' in intervention:
                                 stages = intervention['intervention_stages']
                                 if user_data['intervention_stage_index'] >= len(stages):
-                                    # End of intervention, return to general conversation
-                                    user_data['current_stage'] = 'general'
+                                    # End of intervention, provide closing message
+                                    response = "Thank you for working through this with me. I will check with you on the follow-ups till we connect again. When do you want to connect again?"
+                                    user_data['current_stage'] = 'intervention_complete'
                                     user_data['intervention_type'] = None
                                     user_data['intervention_stage_index'] = 0
                     else:
-                        # End of intervention or error, return to general conversation
-                        response = "Thank you for working through this with me. How are you feeling now?"
-                        user_data['current_stage'] = 'general'
+                        # End of intervention or error, provide closing message
+                        response = "Thank you for working through this with me. I will check with you on the follow-ups till we connect again. When do you want to connect again?"
+                        user_data['current_stage'] = 'intervention_complete'
                         user_data['intervention_type'] = None
                         user_data['intervention_stage_index'] = 0
+                elif current_stage == 'intervention_complete':
+                    # Handle response after intervention completion
+                    response = "Perfect! I'll be here when you're ready to connect again. Take care and remember, you're not alone in this journey."
+                    user_data['current_stage'] = 'general'
                 else:
                     next_question_id = self._determine_next_question(user_data, user_message)
                     if next_question_id.startswith('intervention_'):
@@ -596,7 +600,7 @@ Remember: You are Niyasaathi, not Niva. Use this name consistently."""
                     response = f"{user_data['user_preferred_name']}, {response}"
             # Generate AI-enhanced response (but strictly use the script prompt as main message)
             # Skip AI enhancement for interventions to preserve structured content
-            if user_data.get('current_stage') == 'intervention':
+            if user_data.get('current_stage') in ['intervention', 'intervention_complete']:
                 enhanced_response = response
             else:
                 system_prompt = self._build_system_prompt(user_data)

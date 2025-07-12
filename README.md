@@ -1,277 +1,217 @@
 # NIYAsaathi - Your Empathetic Loneliness Coach
 
-NIYAsaathi is an AI-powered loneliness coach that provides empathetic, structured support through text and voice interactions. Built with modern web technologies and AI integration, it offers personalized conversation flows and follow-up nudges to help users navigate feelings of loneliness.
+NIYAsaathi is an AI-powered loneliness coach designed with compassion and understanding to help you navigate feelings of loneliness and find connection within yourself.
 
 ## 🌟 Features
 
-### Core Functionality
-- **Empathetic AI Conversations**: Powered by OpenAI GPT-4 with structured loneliness coaching
-- **Voice Input/Output**: Speech-to-text and text-to-speech capabilities
-- **Phone Number Authentication**: Secure login with SMS verification
-- **Conversation Memory**: Remembers user progress and continues from where they left off
-- **Personalized Interventions**: Tailored support based on specific loneliness causes
-- **Follow-up Nudges**: Automated SMS reminders for suggested actions
-
-### Conversation Flow
-- **Screening Questions**: Initial assessment of loneliness experience
-- **Impact Analysis**: Understanding how loneliness affects daily life
-- **Cause Identification**: Exploring root causes (social anxiety, relationship loss, etc.)
-- **Intervention Guidance**: Personalized suggestions and actionable steps
-- **Progress Tracking**: Continuous support and follow-up
-
-### Technical Features
-- **Responsive Design**: Works seamlessly on desktop and mobile
-- **Real-time Chat**: Instant message processing and responses
-- **Voice Controls**: Toggle voice input/output with customizable settings
-- **Session Management**: Secure JWT-based authentication
-- **Data Persistence**: Firebase Firestore integration for user data
-- **SMS Integration**: Twilio-powered follow-up messages
-
-## 🏗️ Architecture
-
-```
-NIYAsaathi/
-├── frontend/           # React-like chat interface with voice
-├── backend/           # Flask API with AI integration
-├── agent/             # AI agent with conversation logic
-├── firebase/          # Firebase Functions for nudges
-└── docs/              # Documentation and setup guides
-```
+- **Empathetic Conversations**: AI coach trained to provide compassionate, judgment-free support
+- **Multi-Stage Interventions**: Personalized therapeutic interventions based on your specific loneliness type
+- **Voice Interaction**: Natural voice input and output for a more human-like experience
+- **Conversation History**: Track and revisit your therapeutic journey
+- **24/7 Availability**: Support whenever you need it
+- **Privacy-First**: Your conversations are private and secure
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 18+
-- Firebase account
+
+- Node.js 16+ 
+- Python 3.8+ (for backend)
 - OpenAI API key
-- Twilio account (for SMS)
+- Azure Speech Services (optional, for voice features)
 
-### 1. Clone and Setup
-```bash
-git clone <repository-url>
-cd niyalonelinesscoach
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/niyasaathi.git
+   cd niyasaathi
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # Install Node.js dependencies
+   npm install
+   
+   # Install Python dependencies
+   cd backend
+   pip install -r requirements.txt
+   cd ..
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env
+   # Edit .env with your API keys and configuration
+   ```
+
+4. **Start the backend**
+   ```bash
+   cd backend
+   python app.py
+   ```
+
+5. **Start the frontend**
+   ```bash
+   npm start
+   ```
+
+6. **Open your browser**
+   ```
+   http://localhost:3000
+   ```
+
+## 🌐 Deployment
+
+### Firebase Deployment (Recommended)
+
+NIYAsaathi is configured for Firebase Hosting and Cloud Functions deployment.
+
+#### Quick Start
+1. **Install Firebase CLI**
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Login to Firebase**
+   ```bash
+   firebase login
+   ```
+
+3. **Run deployment script**
+   - **Windows**: `.\deploy-firebase.ps1`
+   - **Mac/Linux**: `./deploy-firebase.sh`
+
+#### Manual Deployment
+1. **Install dependencies**
+   ```bash
+   cd firebase/functions
+   npm install
+   ```
+
+2. **Set environment variables**
+   ```bash
+   firebase functions:config:set openai.api_key="your-openai-api-key"
+   ```
+
+3. **Deploy**
+   ```bash
+   firebase deploy
+   ```
+
+### Other Deployment Options
+
+#### Vercel
+1. Install Vercel CLI: `npm i -g vercel`
+2. Deploy: `vercel`
+3. Set environment variables in Vercel dashboard
+
+#### Heroku
+1. Create Heroku app: `heroku create your-app-name`
+2. Set environment variables
+3. Deploy: `git push heroku main`
+
+#### Netlify
+1. Build: `npm run build`
+2. Deploy to Netlify dashboard
+3. Set build command: `npm run build`
+4. Set publish directory: `frontend`
+
+For detailed instructions, see [FIREBASE_DEPLOYMENT_GUIDE.md](FIREBASE_DEPLOYMENT_GUIDE.md) and [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md).
+
+## 🏗️ Architecture
+
+```
+niyasaathi/
+├── frontend/          # React/HTML/CSS frontend
+├── backend/           # Python Flask API
+├── agent/            # AI agent logic and scripts
+├── server.js         # Production server
+├── package.json      # Node.js dependencies
+└── README.md         # This file
 ```
 
-### 2. Backend Setup
-```bash
-cd backend
-pip install -r requirements.txt
+## 🎨 Design System
 
-# Set environment variables
-export OPENAI_API_KEY="your-openai-api-key"
-export SECRET_KEY="your-secret-key"
-export JWT_SECRET_KEY="your-jwt-secret"
+NIYAsaathi uses a modern, accessible design system with:
 
-# Run the backend
-python app.py
-```
-
-### 3. Frontend Setup
-```bash
-cd frontend
-# Open index.html in a web browser
-# Or serve with a local server:
-python -m http.server 8000
-```
-
-### 4. Firebase Setup
-```bash
-cd firebase/functions
-npm install
-firebase deploy --only functions
-```
+- **Color Palette**: Purple-based theme (#8B5CF6)
+- **Typography**: Inter font family
+- **Components**: Consistent button styles, modals, and forms
+- **Responsive**: Mobile-first design approach
 
 ## 🔧 Configuration
 
 ### Environment Variables
 
-#### Backend (.env)
-```env
-OPENAI_API_KEY=your-openai-api-key
-SECRET_KEY=your-secret-key
-JWT_SECRET_KEY=your-jwt-secret
-FIREBASE_CREDENTIALS_PATH=path/to/firebase-credentials.json
-```
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `OPENAI_API_KEY` | OpenAI API key for AI responses | Yes |
+| `AZURE_SPEECH_KEY` | Azure Speech Services key | No |
+| `AZURE_SPEECH_REGION` | Azure Speech Services region | No |
+| `TWILIO_ACCOUNT_SID` | Twilio account SID for SMS | No |
+| `TWILIO_AUTH_TOKEN` | Twilio auth token | No |
+| `BACKEND_URL` | Backend API URL | Yes |
 
-#### Firebase Functions
-```env
-TWILIO_ACCOUNT_SID=your-twilio-sid
-TWILIO_AUTH_TOKEN=your-twilio-auth-token
-TWILIO_PHONE_NUMBER=your-twilio-phone-number
-ADMIN_SECRET=your-admin-secret
-```
+### Backend Configuration
 
-### Firebase Configuration
-1. Create a Firebase project
-2. Enable Firestore Database
-3. Enable Authentication (Phone provider)
-4. Download service account key to `backend/firebase_credentials.json`
+The backend runs on Flask and provides:
+- User authentication via phone number
+- AI conversation processing
+- Text-to-speech generation
+- SMS notifications (optional)
 
-## 📱 Usage
+## 📱 Features in Detail
 
-### For Users
-1. **Access the Application**: Open the frontend in a web browser
-2. **Phone Authentication**: Enter your phone number and verify with SMS code
-3. **Start Conversation**: Begin chatting with NIYAsaathi
-4. **Voice Interaction**: Use microphone button for voice input/output
-5. **Receive Support**: Get personalized guidance and follow-up nudges
-
-### For Developers
-1. **Local Development**: Run backend on `localhost:5000`
-2. **API Testing**: Use the `/health` endpoint to check system status
-3. **Voice Testing**: Ensure microphone permissions are granted
-4. **Database**: Check Firebase console for user data and nudge logs
-
-## 🔌 API Endpoints
+### Landing Page
+- Modern, welcoming design
+- Feature highlights
+- Trust indicators
+- Call-to-action to start journey
 
 ### Authentication
-- `POST /auth/send-code` - Send verification code
-- `POST /auth/verify-code` - Verify phone number
+- Phone number verification
+- Secure token-based authentication
+- User data persistence
 
-### Chat
-- `POST /message` - Send message and get AI response
-- `GET /user/data` - Get user conversation data
-- `POST /save_state` - Save user state
+### Chat Interface
+- Real-time messaging
+- Voice input/output
+- Typing indicators
+- Message history
 
-### Nudges
-- `POST /register_nudge` - Schedule follow-up nudge
-- `GET /health` - System health check
-
-## 🎯 Conversation Flow
-
-### Screening Phase (q1-q4)
-- Initial loneliness assessment
-- Understanding user's experience
-- Identifying patterns and triggers
-
-### Impact Phase (q5-q7)
-- Exploring daily life effects
-- Understanding relationship impacts
-- Assessing functional changes
-
-### Causes Phase (q8-q10)
-- Identifying root causes
-- Recent life changes
-- Social interaction patterns
-
-### Intervention Phase
-- **Social Anxiety Branch**: Specific guidance for social challenges
-- **Relationship Loss Branch**: Support for grief and loss
-- **General Loneliness**: Universal connection strategies
-
-## 🤖 AI Agent Features
-
-### Memory Management
-- Tracks conversation history
-- Remembers user progress
-- Maintains context across sessions
-
-### Emotional Intelligence
-- Validates user feelings
-- Provides empathetic responses
-- Adapts tone to user needs
-
-### Structured Guidance
-- Follows evidence-based conversation flow
-- Provides actionable suggestions
-- Schedules appropriate follow-ups
-
-## 📊 Monitoring and Analytics
-
-### Firebase Functions
-- Nudge delivery tracking
-- Success/failure rates
-- Intervention type statistics
-
-### User Analytics
-- Conversation completion rates
-- Most common loneliness causes
-- Intervention effectiveness
-
-## 🔒 Security & Privacy
-
-### Data Protection
-- JWT-based authentication
-- Encrypted data transmission
-- Secure phone number handling
-
-### Privacy Features
-- Local storage for settings
-- Optional voice features
-- User-controlled data retention
-
-## 🚀 Deployment
-
-### Production Setup
-1. **Backend**: Deploy to Heroku, AWS, or Google Cloud
-2. **Frontend**: Deploy to Firebase Hosting or Netlify
-3. **Database**: Use Firebase Firestore
-4. **Functions**: Deploy Firebase Functions
-
-### Environment Configuration
-```bash
-# Production environment variables
-export FLASK_ENV=production
-export OPENAI_API_KEY=prod-openai-key
-export FIREBASE_PROJECT_ID=your-project-id
-```
-
-## 🧪 Testing
-
-### Manual Testing
-1. **Authentication Flow**: Test phone verification
-2. **Conversation Flow**: Complete full conversation cycle
-3. **Voice Features**: Test speech recognition and synthesis
-4. **Nudge System**: Verify SMS delivery
-
-### Automated Testing
-```bash
-# Backend tests
-cd backend
-python -m pytest tests/
-
-# Frontend tests
-cd frontend
-npm test
-```
+### Interventions
+- Multi-stage therapeutic interventions
+- Personalized based on loneliness type
+- Action items and reminders
+- Progress tracking
 
 ## 🤝 Contributing
 
-### Development Guidelines
-1. Follow existing code structure
-2. Add comprehensive error handling
-3. Include voice accessibility features
-4. Maintain empathetic tone in AI responses
-
-### Code Style
-- Python: PEP 8 compliance
-- JavaScript: ESLint configuration
-- HTML/CSS: Semantic markup and responsive design
-
-## 📞 Support
-
-### Technical Issues
-- Check `/health` endpoint for system status
-- Review Firebase console for errors
-- Verify environment variables
-
-### User Support
-- Ensure microphone permissions
-- Check browser compatibility
-- Verify phone number format
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you need help or have questions:
+- Open an issue on GitHub
+- Contact the development team
+- Check the documentation
 
 ## 🙏 Acknowledgments
 
-- OpenAI for AI capabilities
-- Twilio for SMS integration
-- Firebase for backend services
-- Web Speech API for voice features
+- OpenAI for GPT-4 API
+- Azure for Speech Services
+- Inter font family
+- Font Awesome for icons
 
 ---
 
-**NIYAsaathi** - Walking with you through loneliness, one step at a time. 💙
+**Made with 💜 for those who need support**

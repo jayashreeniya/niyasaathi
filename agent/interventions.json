@@ -121,7 +121,7 @@
     "follow_up": "How did it feel to try one of these suggestions? Remember, there's no rush - we're building connection at your own pace."
   },
   "relationship_loss": {
-    "title": "Healing After Relationship Changes",
+    "title": "Healing Relationship Loneliness",
     "description": "Relationship changes can leave us feeling profoundly alone, even when surrounded by others. Your feelings are real, and it's okay to take time to heal.",
     "intervention_stages": [
       {
@@ -172,7 +172,7 @@
       {
         "stage": "reclaiming_practice",
         "title": "1-Day Reclaiming Practice",
-        "prompt": "Over the next day, I'd love to offer you this gentle experiment: Think of one small activity that you used to associate with that person—something you stopped doing because it reminded you of them. It could be: • A meal you shared • A place you used to go • A show or song you both loved • A time of day you used to talk. Now try doing it on your own—but with a small shift. Light a candle. Add music. Make tea. Go with a friend. Reclaim it—not to erase them, but to remind yourself: \"This still belongs to me.\" Want to try that sometime this week?",
+        "prompt": "Over the next day, I'd love to offer you this gentle experiment: Think of one small activity that you used to associate with that person—something you stopped doing because it reminded you of them. It could be:  A meal you shared, A place you used to go A show or song you both loved  A time of day you used to talk. Now try doing it on your own—but with a small shift. Light a candle. Add music. Make tea. Go with a friend. Reclaim it—not to erase them, but to remind yourself: \"This still belongs to me.\" Want to try that sometime this week?",
         "type": "self_guided",
         "duration": "1 day",
         "reminder_after": "24 hours",
@@ -957,5 +957,459 @@
       }
     ],
     "follow_up": "How does it feel to practice being kinder to yourself? Remember, you are inherently worthy of love and belonging."
+  },
+  "moving": {
+    "title": "Loneliness After Moving",
+    "description": "Big transitions like moving don't just relocate us physically. They pull at our sense of identity, comfort, and belonging too. Let's gently explore this together.",
+    "intervention_stages": [
+      {
+        "stage": "checkin",
+        "title": "Initial Check-in",
+        "prompt": "Hey again. I'm so glad you're here. You mentioned earlier that this sense of loneliness might be connected to a recent move—whether it's a city, job, college, or country. Big transitions like this don't just relocate us physically. They pull at our sense of identity, comfort, and belonging too. Would it feel okay to gently explore this today?",
+        "type": "conversation"
+      },
+      {
+        "stage": "introduction",
+        "title": "Introduction",
+        "prompt": "Thank you for your openness. Let's begin by grounding ourselves in what feels real right now.",
+        "type": "conversation"
+      },
+      {
+        "stage": "real_time_grounding",
+        "title": "Real-Time Grounding Exercise 1: Sensory Familiarity Scan",
+        "prompt": "Let's take a moment. Can you look around and name out loud—or just to yourself—3 things in your space right now that feel familiar or comforting? It could be: - A smell - A sound - An object that traveled with you - A plant you've kept alive - A small ritual you do daily. What do you notice?",
+        "type": "real_time_practice"
+      },
+      {
+        "stage": "real_time_grounding_followup",
+        "title": "Real-Time Grounding Follow-up",
+        "prompt": "That's your nervous system finding its anchors. Even if they feel small, they count. You're already beginning to make this new place yours.",
+        "type": "conversation"
+      },
+      {
+        "stage": "emotional_location",
+        "title": "Exercise 2: Emotional Location Check-In",
+        "prompt": "Now let's turn inward. If your loneliness had a physical location in your body today—where would it be? Just notice it. No judgment. You can even place your hand there if it helps. What's the sensation like—tightness? heaviness? numbness?",
+        "type": "real_time_practice"
+      },
+      {
+        "stage": "emotional_location_followup",
+        "title": "Emotional Location Follow-up",
+        "prompt": "Thanks for tuning into that. Let's take one slow breath in… and out. You don't need to \"fix\" it right now—just witness it.",
+        "type": "conversation"
+      },
+      {
+        "stage": "mapping_comfort",
+        "title": "1-Day Exercise 1: \"Mapping Comfort\" Walk",
+        "prompt": "If you're stepping out today—even just to the grocery store—I invite you to take a short walk with new eyes. As you go, gently look around and name things that feel calming or neutral. Don't look for beauty—look for quiet. You might notice: - A peaceful building - A tree that catches light - A stranger who smiles - A smell from a café. Afterward, write or voice-note a quick reflection: \"I felt most at ease when…\" \"I felt most disconnected when…\" Would you like me to check in tomorrow about it?",
+        "type": "self_guided",
+        "duration": "10-20 minutes",
+        "reminder_after": "24 hours",
+        "follow_up_question": "How did the mapping comfort walk feel? What did you notice?"
+      },
+      {
+        "stage": "send_soft_hello",
+        "title": "1-Day Exercise 2: \"Send a Soft Hello\"",
+        "prompt": "Here's another experiment. Reach out to someone from your old city, school, or community—not with big updates, just a simple message: \"Just thinking of you today—hope you're well.\" or \"I moved recently and miss the conversations we used to have.\" This isn't about rekindling everything—just reminding your heart: you still matter to someone, even across distance. Did someone come to mind?",
+        "type": "self_guided",
+        "duration": "5 minutes",
+        "reminder_after": "24 hours",
+        "follow_up_question": "How did it feel to reach out? What response did you get?"
+      },
+      {
+        "stage": "weekly_practices",
+        "title": "Week-Long Practices",
+        "prompt": "Here's a week of slow, reflective prompts you can respond to in writing, voice notes, or even quiet thought. Take 5–10 mins a day. You're welcome to share anything that surfaces with me if that feels right. Day 1: \"What I Brought With Me\" - What values, memories, or inner strengths did I carry here? Day 2: \"What I've Lost or Left\" - What do I find myself grieving most—people, habits, pace, identity? Day 3: \"My First Glimmer\" - What's one moment I felt even slightly okay, curious, or open here? Day 4: \"My Invisible Labor\" - What emotional work have I been doing behind the scenes lately? Day 5: \"One Small Ritual\" - What's one new habit I can create to mark my time here (tea at 4pm, nightly stretch, journaling)? Day 6: \"What I Need\" - What's one emotional or social need I wish someone could meet here? Day 7: \"Reclaiming Belonging\" - How can I remind myself that belonging can be slow… but still possible? Would it help to set reminders for these, or do them together next week?",
+        "type": "self_guided",
+        "duration": "1 week",
+        "daily_prompts": [
+          "What values, memories, or inner strengths did I carry here?",
+          "What do I find myself grieving most—people, habits, pace, identity?",
+          "What's one moment I felt even slightly okay, curious, or open here?",
+          "What emotional work have I been doing behind the scenes lately?",
+          "What's one new habit I can create to mark my time here?",
+          "What's one emotional or social need I wish someone could meet here?",
+          "How can I remind myself that belonging can be slow… but still possible?"
+        ],
+        "reminder_after": "3 days",
+        "follow_up_question": "How are the weekly practices going? Which day's prompt resonated most with you?"
+      },
+      {
+        "stage": "done_together",
+        "title": "Done-Together Exercise: \"If This New Place Could Speak\"",
+        "prompt": "Let's try something creative together. If this new city, job, or college could speak to you, what would it say? \"I know you feel ___ right now. But I promise…\" Take your time.",
+        "type": "collaborative"
+      },
+      {
+        "stage": "done_together_reverse",
+        "title": "Done-Together Exercise: Reverse",
+        "prompt": "Now reverse it. What would you like to say back? \"I'm trying to ___, even though I feel ___.\"",
+        "type": "collaborative"
+      },
+      {
+        "stage": "optional_anchoring",
+        "title": "Optional Anchoring Rituals",
+        "prompt": "If you're interested in something sensory or symbolic to reduce emotional isolation: - Light the same candle every evening and name one thing you're grateful for - Create a \"familiar corner\" in your room filled with objects that feel like home - Name your routines like rituals—\"morning grounding tea,\" \"Wednesday check-in walk\" - Record one audio message to your future self about what you hope to grow here. Which one feels most doable right now?",
+        "type": "conversation"
+      },
+      {
+        "stage": "closing",
+        "title": "Closing",
+        "prompt": "Let's end here for today. You're not \"behind\" in adjusting. You're navigating change and loneliness—and still showing up for yourself. That's resilience in its quietest form. Would you like to return to one of these together next time?",
+        "type": "conversation"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Create Familiar Anchors",
+        "description": "Establish small rituals or objects that remind you of home and comfort",
+        "action": "Set up one familiar corner or daily ritual in your new space",
+        "reminder": "Even small anchors can help you feel more grounded"
+      },
+      {
+        "title": "Map Your Comfort Zones",
+        "description": "Identify places and activities in your new environment that feel calming",
+        "action": "Take a short walk and notice 3 things that feel peaceful",
+        "reminder": "You're building new comfort zones, one step at a time"
+      },
+      {
+        "title": "Stay Connected to Your Past",
+        "description": "Maintain connections with people from your previous location",
+        "action": "Send a simple message to someone you miss",
+        "reminder": "Distance doesn't have to mean disconnection"
+      }
+    ],
+    "follow_up": "How are you feeling about your new environment? Remember, adjustment takes time and you're doing great."
+  },
+  "social_anxiety_intervention": {
+    "title": "Loneliness Rooted in Social Anxiety",
+    "description": "Social anxiety can make connection feel overwhelming. Let's work together to build confidence and find gentle ways to connect that feel comfortable for you.",
+    "intervention_stages": [
+      {
+        "stage": "checkin",
+        "title": "Initial Check-in",
+        "prompt": "Hey again. I'm really glad you're back. Earlier, we touched on how social anxiety might be one of the reasons your loneliness has been harder to shake. And maybe there's a voice inside—an inner critic—that says things like: \"You're too awkward,\" or \"Why would they want to talk to me?\" Would it feel okay to gently explore that together—and see what can help?",
+        "type": "conversation"
+      },
+      {
+        "stage": "introduction",
+        "title": "Introduction",
+        "prompt": "Thank you. That voice may be trying to protect you—but sometimes it protects you from things you deeply want: closeness, connection, being seen. Let's start with something simple—what kind of social situations feel most difficult or draining for you right now?",
+        "type": "conversation"
+      },
+      {
+        "stage": "real_time_regulation",
+        "title": "Real-Time Regulation Practice: \"Before-You-Speak\" Calm",
+        "prompt": "I hear you. And it makes total sense that those moments might stir up discomfort or dread. Let's begin with something that helps regulate your body, especially before a social moment. Want to try something right now? Just a 1-minute breath-body grounding: 1. Place your hand gently over your chest or belly. 2. Inhale slowly for 4 seconds. 3. Hold that breath for 2 seconds. 4. Exhale for 6 seconds, slowly. 5. As you exhale, say silently: \"I can show up, even if I'm scared.\" Let me know if you're ready to try it with me.",
+        "type": "real_time_practice"
+      },
+      {
+        "stage": "real_time_regulation_followup",
+        "title": "Real-Time Regulation Follow-up",
+        "prompt": "That was a moment of self-support. A small one—but it counts. Let's build on it gently.",
+        "type": "conversation"
+      },
+      {
+        "stage": "negative_thought_reframing",
+        "title": "Negative Thought Reframing: Cognitive Pause",
+        "prompt": "After social moments, what thoughts usually flood your mind? Do any of these sound familiar? - \"That was so awkward\" - \"I bet they're judging me\" - \"I'm not interesting enough\" Can you share one that comes up often?",
+        "type": "conversation"
+      },
+      {
+        "stage": "reframe_practice",
+        "title": "Reframe Practice",
+        "prompt": "That voice can be loud, I know. Let's try this reframe together. Fill in the blanks: \"Even though my mind said [], I choose to believe [].\" Try it out if you feel ready.",
+        "type": "collaborative"
+      },
+      {
+        "stage": "reframe_followup",
+        "title": "Reframe Follow-up",
+        "prompt": "Beautifully said. You're not fighting the thought—you're just choosing another voice to lead.",
+        "type": "conversation"
+      },
+      {
+        "stage": "mini_challenge",
+        "title": "Mini-Challenge of the Day: Low-Stakes Connection",
+        "prompt": "Today, can we try a mini social action together? Something simple, like: - Replying to a story or comment - Asking someone how their day is - Making eye contact or smiling at someone - Starting a sentence with: \"I was thinking about…\" What feels most doable today?",
+        "type": "self_guided",
+        "duration": "1 day",
+        "reminder_after": "24 hours",
+        "follow_up_question": "How did the mini-challenge feel? What happened?"
+      },
+      {
+        "stage": "mini_challenge_followup",
+        "title": "Mini-Challenge Follow-up",
+        "prompt": "Perfect. No pressure on the outcome—just on the action. And if that inner critic shows up afterward… come back to this space and we'll work through it.",
+        "type": "conversation"
+      },
+      {
+        "stage": "spiral_interruptor",
+        "title": "Spiral Interruptor: After-Social Reflection",
+        "prompt": "Let's say you followed through—and now your brain is racing with self-doubt. Try this spiral interrupter: 1. What story is my mind telling me? 2. Is there evidence for and against that story? 3. What would I tell a friend who felt this way? Would you like to try this now with a recent moment?",
+        "type": "collaborative"
+      },
+      {
+        "stage": "spiral_interruptor_followup",
+        "title": "Spiral Interruptor Follow-up",
+        "prompt": "That's a powerful shift. You just moved from self-criticism to self-compassion.",
+        "type": "conversation"
+      },
+      {
+        "stage": "weekly_confidence_ladder",
+        "title": "Weekly Confidence Ladder",
+        "prompt": "Would you like to slowly build comfort over a week? Here's a gentle plan: - Day 1: Just observe others talking—notice what feels natural about them - Day 2: React to a post or send a light message - Day 3: Share a small thought or preference with someone - Day 4: Join a conversation, even briefly - Day 5: Reflect—what changed inside you? Would you want to try this next week? I can check in with you if you'd like.",
+        "type": "self_guided",
+        "duration": "1 week",
+        "daily_prompts": [
+          "Just observe others talking—notice what feels natural about them",
+          "React to a post or send a light message",
+          "Share a small thought or preference with someone",
+          "Join a conversation, even briefly",
+          "Reflect—what changed inside you?"
+        ],
+        "reminder_after": "3 days",
+        "follow_up_question": "How is the confidence ladder going? Which day felt most manageable?"
+      },
+      {
+        "stage": "roleplay_space",
+        "title": "Practicing With Me: Roleplay Space",
+        "prompt": "If it feels safe, we can practice together right here. You choose: - Saying hi to someone new - Reaching out after silence - Exiting a conversation politely - Asking for emotional support. No judgment—just a space to experiment. Want to try?",
+        "type": "collaborative"
+      },
+      {
+        "stage": "roleplay_followup",
+        "title": "Roleplay Follow-up",
+        "prompt": "That's brave of you. Let's take it step by step. You don't have to get it \"right\"—just real.",
+        "type": "conversation"
+      },
+      {
+        "stage": "reflection_exercise",
+        "title": "1-Day Reflection Exercise: \"What Belonging Could Feel Like\"",
+        "prompt": "If you have space later today, write freely on one of these: - \"What would it feel like to belong—even if I'm still anxious?\" - \"What do I wish someone would say to me after I speak up?\" - \"What are 3 things I'd say to a younger version of me who was afraid to connect?\" You can keep it private, or share parts with me next time.",
+        "type": "self_guided",
+        "duration": "1 day",
+        "reminder_after": "24 hours",
+        "follow_up_question": "How did the reflection exercise feel? What insights came up?"
+      },
+      {
+        "stage": "weekly_log",
+        "title": "Weekly Log: The Visibility Journal",
+        "prompt": "This week, keep a log titled: \"Ways I Showed Up.\" Any moment counts—even the small ones: - I replied - I didn't fake a smile - I said no - I stayed in the conversation - I made eye contact. Would you be open to this for a few days? We can review it together later.",
+        "type": "self_guided",
+        "duration": "1 week",
+        "reminder_after": "3 days",
+        "follow_up_question": "How is the visibility journal going? What patterns are you noticing?"
+      },
+      {
+        "stage": "long_term_companion",
+        "title": "Long-Term Companion Exercise: Your Social Story",
+        "prompt": "If you'd like to go deeper, write your social connection story: - What messages did you receive growing up about being social? - Who made you feel like your voice wasn't enough—or too much? - What version of you is still hiding? - What kind of friendships or community do you secretly crave? This doesn't have to be finished today—it can unfold slowly. Would you like me to ask about it next week?",
+        "type": "self_guided",
+        "duration": "ongoing",
+        "reminder_after": "7 days",
+        "follow_up_question": "How is your social story unfolding? What insights are emerging?"
+      },
+      {
+        "stage": "co_regulation",
+        "title": "Co-Regulation Prompt",
+        "prompt": "Before we pause, place your hand back on your chest or stomach. Breathe once. Now say this silently: \"I am allowed to take up space. I can be afraid and still connect.\" You're not alone in this.",
+        "type": "real_time_practice"
+      },
+      {
+        "stage": "wrap_up",
+        "title": "Wrap-Up",
+        "prompt": "You've done some serious inner work today—without pushing yourself too hard. Would you like to check in tomorrow? Or create another mini challenge for the week?",
+        "type": "conversation"
+      },
+      {
+        "stage": "closing",
+        "title": "Closing",
+        "prompt": "Whether you try again tomorrow, next week, or just sit with what you've done—know this: Your fear doesn't make you weak. It means you care about connection deeply. And that care is something I truly respect.",
+        "type": "conversation"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Practice Self-Compassion",
+        "description": "Be kind to yourself when social situations feel difficult",
+        "action": "Write down three kind things to say to yourself before social situations",
+        "reminder": "Your anxiety doesn't make you weak—it shows you care about connection"
+      },
+      {
+        "title": "Start with Low-Stakes Interactions",
+        "description": "Begin with simple, low-pressure social actions",
+        "action": "Try one small social interaction this week",
+        "reminder": "Every small step builds confidence"
+      },
+      {
+        "title": "Use the Spiral Interruptor",
+        "description": "When self-doubt arises, question the story your mind is telling",
+        "action": "Practice the three-question reflection when anxious thoughts come up",
+        "reminder": "You can choose which voice to listen to"
+      }
+    ],
+    "follow_up": "How are you feeling about social connection? Remember, progress happens one step at a time."
+  },
+  "digital_disconnection": {
+    "title": "Digital Disconnection",
+    "description": "Being online doesn't always mean feeling connected. Let's explore ways to build more meaningful digital relationships and find balance in your online interactions.",
+    "intervention_stages": [
+      {
+        "stage": "checkin",
+        "title": "Initial Check-in",
+        "prompt": "Hey again. When we last spoke, you shared how being online doesn't always mean feeling connected. That disconnection—despite messages, scrolling, updates—can feel strangely hollow, right? Would it be okay if we shift into looking at ways to gently work with that?",
+        "type": "conversation"
+      },
+      {
+        "stage": "introduction",
+        "title": "Introduction",
+        "prompt": "Thanks for saying yes. Let's try to not just talk about this loneliness today—but also do something with it.",
+        "type": "conversation"
+      },
+      {
+        "stage": "connection_pulse_check",
+        "title": "Real-Time Strategy: \"Connection Pulse Check\"",
+        "prompt": "Take a moment and think about your last 5 digital interactions. Not what was said—but how it felt. Now, ask yourself: - Did I feel heard? - Did I feel like I could be myself? - Did this give me energy—or drain it? Write down the initials or icons of any people who felt nourishing… even slightly. Want to share one?",
+        "type": "real_time_practice"
+      },
+      {
+        "stage": "connection_pulse_followup",
+        "title": "Connection Pulse Check Follow-up",
+        "prompt": "That's a powerful place to start. Those names? Those are your potential anchors. Let's work on strengthening even one of those.",
+        "type": "conversation"
+      },
+      {
+        "stage": "pause_before_scroll",
+        "title": "Daily Micro-Practice: \"Pause Before You Scroll\"",
+        "prompt": "Before you open any social app today, try this short ritual: 1. Close your eyes. 2. Ask: \"Am I here to connect… or distract?\" 3. Decide: Who would I actually like to reach out to? Even one intentional check-in can change the tone of your day. Would you like to set a reminder for this each morning or night?",
+        "type": "self_guided",
+        "duration": "1 day",
+        "reminder_after": "12 hours",
+        "follow_up_question": "How did the pause-before-scroll practice feel? What did you notice?"
+      },
+      {
+        "stage": "pause_before_scroll_followup",
+        "title": "Pause Before Scroll Follow-up",
+        "prompt": "Love that. Let's build around intention, not just routine.",
+        "type": "conversation"
+      },
+      {
+        "stage": "digital_minimalism_day",
+        "title": "24-Hour Reconnection Exercise: \"Digital Minimalism Day\"",
+        "prompt": "Let's try something that gives your brain breathing room. For one day (you can choose which), set this gentle boundary: - Keep your phone in another room during meals or rest time. - No social media scrolling—only messaging. - One digital check-in (voice note, call, or long text) with someone you genuinely miss. Would you like to pick a day for this and set it as an experiment?",
+        "type": "self_guided",
+        "duration": "1 day",
+        "reminder_after": "24 hours",
+        "follow_up_question": "How did the digital minimalism day feel? What did you discover?"
+      },
+      {
+        "stage": "digital_minimalism_followup",
+        "title": "Digital Minimalism Follow-up",
+        "prompt": "Beautiful. Sometimes digital quiet is what allows real connection to speak.",
+        "type": "conversation"
+      },
+      {
+        "stage": "unfollow_inner_narrator",
+        "title": "Thought-Focused Exercise: \"Unfollow Your Inner Narrator\"",
+        "prompt": "Sometimes digital disconnection isn't about other people—but the inner voice that says: - \"They're just being polite.\" - \"You're not interesting enough.\" - \"Everyone else has their people.\" Do you recognize any version of these thoughts?",
+        "type": "conversation"
+      },
+      {
+        "stage": "reframe_technique",
+        "title": "Reframe Technique",
+        "prompt": "Let's try a simple technique: Take one thought and reframe it using this format: Even though I think [insert old belief], I'm learning that [new, kinder truth]. Want to try one together?",
+        "type": "collaborative"
+      },
+      {
+        "stage": "reframe_followup",
+        "title": "Reframe Follow-up",
+        "prompt": "That's an important shift. You don't need to believe every thought your loneliness whispers.",
+        "type": "conversation"
+      },
+      {
+        "stage": "deep_thread",
+        "title": "Weekly Building Practice: \"1 Deep Thread\"",
+        "prompt": "Let's add a weekly intervention. Choose one person you'd like to feel closer to. Each week, try to send them: - A memory you shared - A meaningful question (\"What's something you've been loving lately?\") - A voice note or funny moment from your life. You're not forcing intimacy—just inviting it. Want to pick someone for this week?",
+        "type": "self_guided",
+        "duration": "1 week",
+        "reminder_after": "3 days",
+        "follow_up_question": "How did the deep thread practice feel? What response did you get?"
+      },
+      {
+        "stage": "deep_thread_followup",
+        "title": "Deep Thread Follow-up",
+        "prompt": "That's a beautiful choice. Let's circle back in a few days—see how it felt on both sides.",
+        "type": "conversation"
+      },
+      {
+        "stage": "co_regulation_option",
+        "title": "Supportive Co-Regulation Option",
+        "prompt": "Sometimes the hardest part of reconnecting is the first message. If you'd like, I can help you: - Draft a message to someone you've drifted from - Process a response that made you feel hurt or ignored - Role-play what a deeper conversation could sound like. Want to do one of those together now?",
+        "type": "collaborative"
+      },
+      {
+        "stage": "co_regulation_followup",
+        "title": "Co-Regulation Follow-up",
+        "prompt": "I'm with you. Connection is a skill we rebuild, not something you either \"have\" or \"don't.\"",
+        "type": "conversation"
+      },
+      {
+        "stage": "reclaiming_digital_space",
+        "title": "Long-Term Practice: \"Reclaiming Your Digital Space\"",
+        "prompt": "Here's a slower reflection you can do across the next 7 days: - What kind of digital environment do I want? - Who energizes me? Who exhausts me? - Where do I feel free to be messy or quiet online? - What part of my online self is a mask? Journaling even 1-2 sentences a day on these can build real clarity. Want to start together?",
+        "type": "self_guided",
+        "duration": "1 week",
+        "daily_prompts": [
+          "What kind of digital environment do I want?",
+          "Who energizes me? Who exhausts me?",
+          "Where do I feel free to be messy or quiet online?",
+          "What part of my online self is a mask?",
+          "What digital interactions leave me feeling most connected?",
+          "What boundaries do I need to set with my digital spaces?",
+          "How can I create more meaningful digital connections?"
+        ],
+        "reminder_after": "3 days",
+        "follow_up_question": "How is the digital space reclamation going? What insights are emerging?"
+      },
+      {
+        "stage": "reclaiming_followup",
+        "title": "Reclaiming Follow-up",
+        "prompt": "That's already a meaningful first step. Remember—disconnection isn't a failure. It's often a signal of misaligned spaces. And you can re-create space with more safety, presence, and intention.",
+        "type": "conversation"
+      },
+      {
+        "stage": "closing",
+        "title": "Before We Pause…",
+        "prompt": "Let's pause here—but just for now. Which of the practices today feels most meaningful or doable to carry forward this week?",
+        "type": "conversation"
+      },
+      {
+        "stage": "final_closing",
+        "title": "Final Closing",
+        "prompt": "I love that. And I'll be here to reflect, adjust, and walk alongside you as you try it out. You don't need hundreds of online friends. You just need a few moments of realness—and that, you're already making space for.",
+        "type": "conversation"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Practice Intentional Connection",
+        "description": "Before opening social apps, ask yourself what you're seeking",
+        "action": "Try the pause-before-scroll ritual for one day",
+        "reminder": "Quality over quantity in digital connections"
+      },
+      {
+        "title": "Identify Nourishing Connections",
+        "description": "Notice which digital interactions actually make you feel connected",
+        "action": "List 3 people whose online interactions energize you",
+        "reminder": "Focus on deepening meaningful connections"
+      },
+      {
+        "title": "Set Digital Boundaries",
+        "description": "Create space for real connection by limiting mindless scrolling",
+        "action": "Try one digital minimalism day this week",
+        "reminder": "Sometimes less digital noise means more real connection"
+      }
+    ],
+    "follow_up": "How are your digital connections feeling? Remember, meaningful connection takes intention and time."
   }
 } 

@@ -1,230 +1,207 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const twilio = require('twilio');
+const express = require('express');
+const cors = require('cors');
+const { NIYAsaathiAgent } = require('./ai_agent');
 
-admin.initializeApp();
-const db = admin.firestore();
+const app = express();
 
-// Twilio configuration
-const accountSid = process.env.TWILIO_ACCOUNT_SID || 'TWILIO_SID';
-const authToken = process.env.TWILIO_AUTH_TOKEN || 'TWILIO_AUTH';
-const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER || '+14155238886';
+// Enable CORS
+app.use(cors({ origin: true }));
 
-const client = new twilio(accountSid, authToken);
+// Parse JSON bodies
+app.use(express.json({ limit: '10mb' }));
 
-// Send scheduled nudges every hour
-exports.sendScheduledNudges = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
-  try {
-    const now = new Date();
-    console.log(`Checking for nudges to send at ${now.toISOString()}`);
-    
-    const snapshot = await db.collection('nudges')
-      .where('send_at', '<=', now)
-      .where('sent', '==', false)
-      .get();
-    
-    console.log(`Found ${snapshot.size} nudges to send`);
-    
-    const sendPromises = snapshot.docs.map(async (doc) => {
-      const nudgeData = doc.data();
-      
-      try {
-        // Send SMS via Twilio
-        await client.messages.create({
-          body: nudgeData.message,
-          from: twilioPhoneNumber,
-          to: nudgeData.phone_number
-        });
-        
-        // Mark as sent
-        await doc.ref.update({
-          sent: true,
-          sent_at: admin.firestore.FieldValue.serverTimestamp()
-        });
-        
-        console.log(`Nudge sent successfully to ${nudgeData.phone_number}`);
-        
-        // Log the interaction
-        await db.collection('nudge_logs').add({
-          user_id: nudgeData.user_id,
-          phone_number: nudgeData.phone_number,
-          message: nudgeData.message,
-          intervention_type: nudgeData.intervention_type,
-          sent_at: admin.firestore.FieldValue.serverTimestamp(),
-          status: 'delivered'
-        });
-        
-      } catch (error) {
-        console.error(`Error sending nudge to ${nudgeData.phone_number}:`, error);
-        
-        // Mark as failed
-        await doc.ref.update({
-          sent: false,
-          error: error.message,
-          retry_count: (nudgeData.retry_count || 0) + 1
-        });
-        
-        // Log the error
-        await db.collection('nudge_logs').add({
-          user_id: nudgeData.user_id,
-          phone_number: nudgeData.phone_number,
-          message: nudgeData.message,
-          intervention_type: nudgeData.intervention_type,
-          sent_at: admin.firestore.FieldValue.serverTimestamp(),
-          status: 'failed',
-          error: error.message
-        });
-      }
+// Initialize AI Agent
+let aiAgent = null;
+
+// Initialize AI Agent with environment variables
+function initializeAgent() {
+    if (!aiAgent) {
+        const openaiApiKey = process.env.OPENAI_API_KEY;
+        if (!openaiApiKey) {
+            throw new Error('OPENAI_API_KEY environment variable is required');
+        }
+        aiAgent = new NIYAsaathiAgent(openaiApiKey);
+    }
+    return aiAgent;
+}
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        version: '1.0.0',
+        service: 'NIYAsaathi Firebase Functions'
     });
-    
-    await Promise.all(sendPromises);
-    console.log('Nudge sending process completed');
-    
-  } catch (error) {
-    console.error('Error in sendScheduledNudges:', error);
-    throw error;
-  }
 });
 
-// Clean up old nudges (older than 30 days)
-exports.cleanupOldNudges = functions.pubsub.schedule('every 24 hours').onRun(async (context) => {
-  try {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
-    const snapshot = await db.collection('nudges')
-      .where('created_at', '<', thirtyDaysAgo)
-      .get();
-    
-    console.log(`Found ${snapshot.size} old nudges to clean up`);
-    
-    const deletePromises = snapshot.docs.map(doc => doc.ref.delete());
-    await Promise.all(deletePromises);
-    
-    console.log('Old nudges cleanup completed');
-    
-  } catch (error) {
-    console.error('Error in cleanupOldNudges:', error);
-    throw error;
-  }
+// Chat endpoint
+app.post('/chat', async (req, res) => {
+    try {
+        const { message, user_data } = req.body;
+        
+        if (!message) {
+            return res.status(400).json({ error: 'Message is required' });
+        }
+
+        const agent = initializeAgent();
+        const response = await agent.process_message(user_data || {}, message);
+        
+        res.json(response);
+    } catch (error) {
+        console.error('Error in chat endpoint:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            message: error.message 
+        });
+    }
 });
 
-// HTTP endpoint to manually trigger nudge sending (for testing)
-exports.triggerNudges = functions.https.onRequest(async (req, res) => {
-  try {
-    // Verify the request is authorized (you can add your own auth logic here)
-    const authHeader = req.headers.authorization;
-    if (!authHeader || authHeader !== `Bearer ${process.env.ADMIN_SECRET}`) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
+// Text-to-speech endpoint
+app.post('/speak', async (req, res) => {
+    try {
+        const { text } = req.body;
+        
+        if (!text) {
+            return res.status(400).json({ error: 'Text is required' });
+        }
+
+        // For now, return a simple response
+        // You can integrate Azure Speech Services here
+        res.json({ 
+            success: true, 
+            message: 'Text-to-speech endpoint ready for Azure integration',
+            text: text 
+        });
+    } catch (error) {
+        console.error('Error in speak endpoint:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            message: error.message 
+        });
     }
-    
-    // Trigger the nudge sending function
-    await exports.sendScheduledNudges();
-    
-    res.json({ success: true, message: 'Nudges triggered successfully' });
-    
-  } catch (error) {
-    console.error('Error triggering nudges:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
 });
 
-// Function to register a new nudge
-exports.registerNudge = functions.https.onRequest(async (req, res) => {
-  try {
-    // Enable CORS
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET, POST');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
-    
-    if (req.method === 'OPTIONS') {
-      res.status(204).send('');
-      return;
+// User data endpoint
+app.get('/user/data', (req, res) => {
+    try {
+        const userData = req.query.user_id ? 
+            { user_id: req.query.user_id, last_updated: new Date().toISOString() } : 
+            { message: 'No user data found' };
+        
+        res.json(userData);
+    } catch (error) {
+        console.error('Error in user data endpoint:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            message: error.message 
+        });
     }
-    
-    if (req.method !== 'POST') {
-      res.status(405).json({ error: 'Method not allowed' });
-      return;
-    }
-    
-    const { user_id, phone_number, message, intervention_type, send_at } = req.body;
-    
-    if (!user_id || !phone_number || !message) {
-      res.status(400).json({ error: 'Missing required fields' });
-      return;
-    }
-    
-    const nudgeData = {
-      user_id,
-      phone_number,
-      message,
-      intervention_type: intervention_type || 'general_loneliness',
-      send_at: send_at ? new Date(send_at) : new Date(Date.now() + 24 * 60 * 60 * 1000), // Default to 24 hours from now
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
-      sent: false,
-      retry_count: 0
-    };
-    
-    const docRef = await db.collection('nudges').add(nudgeData);
-    
-    res.json({
-      success: true,
-      nudge_id: docRef.id,
-      message: 'Nudge registered successfully'
-    });
-    
-  } catch (error) {
-    console.error('Error registering nudge:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
 });
 
-// Function to get nudge statistics
-exports.getNudgeStats = functions.https.onRequest(async (req, res) => {
-  try {
-    // Enable CORS
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET');
-    
-    if (req.method !== 'GET') {
-      res.status(405).json({ error: 'Method not allowed' });
-      return;
+// Authentication endpoints
+app.post('/auth/send-code', async (req, res) => {
+    try {
+        const { phone_number } = req.body;
+        
+        if (!phone_number) {
+            return res.status(400).json({ error: 'Phone number is required' });
+        }
+
+        // Generate a simple verification code (in production, use Twilio)
+        const code = Math.floor(100000 + Math.random() * 900000);
+        
+        // Store the code temporarily (in production, use Firebase Auth)
+        console.log(`Verification code for ${phone_number}: ${code}`);
+        
+        res.json({ 
+            success: true, 
+            message: 'Verification code sent',
+            code: code // Remove this in production
+        });
+    } catch (error) {
+        console.error('Error in send code endpoint:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            message: error.message 
+        });
     }
-    
-    // Get total nudges
-    const totalSnapshot = await db.collection('nudges').get();
-    const totalNudges = totalSnapshot.size;
-    
-    // Get sent nudges
-    const sentSnapshot = await db.collection('nudges').where('sent', '==', true).get();
-    const sentNudges = sentSnapshot.size;
-    
-    // Get failed nudges
-    const failedSnapshot = await db.collection('nudges').where('sent', '==', false).get();
-    const failedNudges = failedSnapshot.size;
-    
-    // Get nudges by intervention type
-    const interventionStats = {};
-    totalSnapshot.docs.forEach(doc => {
-      const data = doc.data();
-      const type = data.intervention_type || 'unknown';
-      interventionStats[type] = (interventionStats[type] || 0) + 1;
-    });
-    
-    res.json({
-      success: true,
-      stats: {
-        total: totalNudges,
-        sent: sentNudges,
-        failed: failedNudges,
-        success_rate: totalNudges > 0 ? (sentNudges / totalNudges * 100).toFixed(2) : 0,
-        by_intervention_type: interventionStats
-      }
-    });
-    
-  } catch (error) {
-    console.error('Error getting nudge stats:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+});
+
+app.post('/auth/verify-code', async (req, res) => {
+    try {
+        const { phone_number, code } = req.body;
+        
+        if (!phone_number || !code) {
+            return res.status(400).json({ error: 'Phone number and code are required' });
+        }
+
+        // Simple verification (in production, use Firebase Auth)
+        // For demo purposes, accept any 6-digit code
+        if (code.length === 6 && /^\d+$/.test(code)) {
+            const user = {
+                id: `user_${Date.now()}`,
+                phone_number: phone_number,
+                created_at: new Date().toISOString()
+            };
+            
+            res.json({ 
+                success: true, 
+                message: 'Verification successful',
+                user: user,
+                token: `token_${Date.now()}` // In production, use JWT
+            });
+        } else {
+            res.status(400).json({ error: 'Invalid verification code' });
+        }
+    } catch (error) {
+        console.error('Error in verify code endpoint:', error);
+        res.status(500).json({ 
+            error: 'Internal server error',
+            message: error.message 
+        });
+    }
+});
+
+// Export the Express app as a Firebase Cloud Function
+exports.api = functions.https.onRequest(app);
+
+// Export individual functions for better performance
+exports.chat = functions.https.onCall(async (data, context) => {
+    try {
+        const { message, user_data } = data;
+        
+        if (!message) {
+            throw new functions.https.HttpsError('invalid-argument', 'Message is required');
+        }
+
+        const agent = initializeAgent();
+        const response = await agent.process_message(user_data || {}, message);
+        
+        return response;
+    } catch (error) {
+        console.error('Error in chat function:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+exports.speak = functions.https.onCall(async (data, context) => {
+    try {
+        const { text } = data;
+        
+        if (!text) {
+            throw new functions.https.HttpsError('invalid-argument', 'Text is required');
+        }
+
+        // Return simple response for now
+        return { 
+            success: true, 
+            message: 'Text-to-speech endpoint ready for Azure integration',
+            text: text 
+        };
+    } catch (error) {
+        console.error('Error in speak function:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
 });
