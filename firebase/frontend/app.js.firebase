@@ -12,6 +12,10 @@ class NIYAsaathiApp {
         this.speechSynthesis = window.speechSynthesis;
         this.isRecording = false;
         this.isTyping = false;
+        this.userHasInteracted = false;
+        this.pendingAudio = null;
+        this.audioQueue = [];
+        this.isPlayingAudio = false;
         
         // Firebase Functions URLs - will be replaced with actual URLs after deployment
         this.API_BASE_URL = 'https://us-central1-niyasaathi-loneliness-coach.cloudfunctions.net'; // Firebase project ID
@@ -45,10 +49,14 @@ class NIYAsaathiApp {
         });
         
         // Chat
-        document.getElementById('send-btn').addEventListener('click', () => this.sendMessage());
+        document.getElementById('send-btn').addEventListener('click', () => {
+            this.userHasInteracted = true;
+            this.sendMessage();
+        });
         document.getElementById('message-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                this.userHasInteracted = true;
                 this.sendMessage();
             }
         });
@@ -222,7 +230,7 @@ class NIYAsaathiApp {
         document.getElementById('user-phone').textContent = this.currentUser.phone_number;
         
         // Show welcome message
-        this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?');
+        this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?', true);
     }
     
     async loadUserData() {
@@ -237,8 +245,9 @@ class NIYAsaathiApp {
                 const data = await response.json();
                 this.userData = data.user_data;
                 // Resume conversation from where user left off
+                // Don't play audio for resumed messages to avoid conflicts with new messages
                 if (this.userData.last_coach_message) {
-                    this.addMessage('coach', this.userData.last_coach_message);
+                    this.addMessage('coach', this.userData.last_coach_message, false);
                 }
             }
         } catch (error) {
@@ -252,10 +261,15 @@ class NIYAsaathiApp {
         
         if (!message || this.isTyping) return;
         
-        // Add user message to chat
-        this.addMessage('user', message);
+        // Stop any playing audio when user sends a message
+        this.stopAllAudio();
+        
+        // Clear input and disable send button
         input.value = '';
         this.updateSendButton();
+        
+        // Add user message to chat
+        this.addMessage('user', message);
         
         // Show typing indicator
         this.showTypingIndicator();
@@ -297,6 +311,13 @@ class NIYAsaathiApp {
     }
     
     addMessage(sender, text, playBackendAudio = false) {
+        console.log('=== ADD MESSAGE CALLED ===');
+        console.log('Sender:', sender);
+        console.log('Text:', text);
+        console.log('PlayBackendAudio:', playBackendAudio);
+        console.log('VoiceOutputEnabled:', this.voiceOutputEnabled);
+        console.log('==========================');
+        
         const messagesContainer = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}`;
@@ -318,6 +339,14 @@ class NIYAsaathiApp {
         
         // Play backend audio if enabled and it's from coach
         if (sender === 'coach' && this.voiceOutputEnabled && playBackendAudio) {
+            console.log('This is the most recent message, playing audio for:', text);
+            
+            // Stop any existing audio before playing new audio
+            if (this.currentAudio) {
+                this.currentAudio.pause();
+                this.currentAudio.currentTime = 0;
+            }
+            
             fetch('/speak', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -332,14 +361,16 @@ class NIYAsaathiApp {
             .then(blob => {
                 const audioUrl = URL.createObjectURL(blob);
                 const audio = new Audio(audioUrl);
+                this.currentAudio = audio;
+                
                 audio.play().catch(error => {
-                    console.error('Error playing Azure TTS audio:', error);
+                    console.error('Error playing Google Cloud TTS audio:', error);
                     // Fallback to browser TTS
                     this.speakMessage(text);
                 });
             })
             .catch(error => {
-                console.error('Error fetching Azure TTS:', error);
+                console.error('Error fetching Google Cloud TTS:', error);
                 // Fallback to browser TTS
                 this.speakMessage(text);
             });
@@ -347,6 +378,245 @@ class NIYAsaathiApp {
             // Use browser TTS as fallback or when backend audio is disabled
             this.speakMessage(text);
         }
+    }
+    
+    // Helper method to split text into sentences
+    splitIntoSentences(text) {
+        console.log('Original text to split:', text);
+        
+        // Estimate audio duration: ~150 words per minute = ~2.5 words per second
+        // Average word length is ~5 characters, so ~12.5 characters per second
+        const estimatedDurationPerChar = 1 / 12.5; // seconds per character
+        const maxDuration = 10; // Reduced from 12 to 10 seconds for better reliability
+        
+        const estimatedDuration = text.length * estimatedDurationPerChar;
+        console.log('Estimated audio duration:', estimatedDuration, 'seconds');
+        
+        // If estimated duration is under limit, don't split
+        if (estimatedDuration <= maxDuration) {
+            console.log('Estimated duration is under limit, not splitting');
+            return [text];
+        }
+        
+        console.log('Estimated duration exceeds limit, splitting text');
+        
+        // Split by sentences first
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+        const cleanedSentences = sentences.map(s => s.trim()).filter(s => s.length > 0);
+        
+        const chunks = [];
+        let currentChunk = '';
+        
+        for (const sentence of cleanedSentences) {
+            const testChunk = currentChunk + (currentChunk ? ' ' : '') + sentence;
+            const testDuration = testChunk.length * estimatedDurationPerChar;
+            
+            if (testDuration <= maxDuration) {
+                currentChunk = testChunk;
+            } else {
+                if (currentChunk) {
+                    chunks.push(currentChunk);
+                }
+                currentChunk = sentence;
+            }
+        }
+        
+        if (currentChunk) {
+            chunks.push(currentChunk);
+        }
+        
+        console.log('Split into', chunks.length, 'chunks:', chunks);
+        return chunks;
+    }
+    
+    // Play audio sequentially for multiple sentences
+    async playAudioSequentially(sentences) {
+        // If only one chunk, play it directly
+        if (sentences.length === 1) {
+            const text = sentences[0];
+            console.log('Playing single chunk:', text);
+            
+            try {
+                await this.playSingleAudio(text);
+            } catch (error) {
+                console.error('Error playing audio:', error);
+            }
+            return;
+        }
+        
+        // Play multiple chunks sequentially
+        console.log('Playing', sentences.length, 'chunks sequentially');
+        
+        for (let i = 0; i < sentences.length; i++) {
+            const sentence = sentences[i];
+            console.log(`Playing chunk ${i + 1}/${sentences.length}:`, sentence);
+            
+            try {
+                await this.playSingleAudio(sentence);
+                // Minimal pause between chunks
+                if (i < sentences.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 25));
+                }
+            } catch (error) {
+                console.error(`Error playing chunk ${i + 1}:`, error);
+                // Continue with next chunk
+            }
+        }
+    }
+    
+    // Play single audio for a sentence
+    async playSingleAudio(text) {
+        console.log('=== SENDING TO AZURE TTS ===');
+        console.log('Text being sent:', text);
+        console.log('Text length:', text.length);
+        console.log('============================');
+        
+        return new Promise((resolve, reject) => {
+            // Add timeout for the entire operation
+            const timeout = setTimeout(() => {
+                console.warn('Audio playback timeout for:', text);
+                reject(new Error('Audio playback timeout'));
+            }, 30000); // 30 second timeout
+            
+            fetch('/speak', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            })
+            .then(res => {
+                console.log('Azure TTS response status:', res.status);
+                console.log('Azure TTS response headers:', res.headers);
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                }
+                return res.blob();
+            })
+            .then(blob => {
+                console.log('Audio blob received, size:', blob.size);
+                console.log('Blob type:', blob.type);
+                
+                if (blob.size === 0) {
+                    throw new Error('Empty audio blob received');
+                }
+                
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                
+                // Stop any existing audio before starting new one
+                if (this.pendingAudio) {
+                    console.log('Stopping existing audio before starting new one');
+                    this.pendingAudio.pause();
+                    this.pendingAudio.currentTime = 0;
+                }
+                
+                // Track the current audio element for stopping
+                this.pendingAudio = audio;
+                
+                // Add timeout for audio loading
+                const loadTimeout = setTimeout(() => {
+                    console.warn('Audio loading timeout for:', text);
+                    URL.revokeObjectURL(audioUrl);
+                    this.pendingAudio = null;
+                    reject(new Error('Audio loading timeout'));
+                }, 10000); // 10 second timeout for loading
+                
+                audio.addEventListener('canplaythrough', () => {
+                    clearTimeout(loadTimeout);
+                    console.log('Audio can play through for:', text);
+                    console.log('Audio duration:', audio.duration, 'seconds');
+                    console.log('Audio ready state:', audio.readyState);
+                });
+                
+                audio.addEventListener('ended', () => {
+                    console.log('Audio playback completed for:', text);
+                    console.log('Total audio duration played:', audio.duration, 'seconds');
+                    clearTimeout(timeout);
+                    clearTimeout(loadTimeout);
+                    URL.revokeObjectURL(audioUrl); // Clean up
+                    this.pendingAudio = null; // Clear tracking
+                    resolve();
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    console.error('Audio error event:', e);
+                    console.error('Audio error details:', audio.error);
+                    clearTimeout(timeout);
+                    clearTimeout(loadTimeout);
+                    URL.revokeObjectURL(audioUrl); // Clean up
+                    this.pendingAudio = null; // Clear tracking
+                    reject(e);
+                });
+                
+                // Add more event listeners for debugging
+                audio.addEventListener('loadstart', () => console.log('Audio load started'));
+                audio.addEventListener('durationchange', () => console.log('Audio duration changed:', audio.duration));
+                audio.addEventListener('loadedmetadata', () => console.log('Audio metadata loaded, duration:', audio.duration));
+                audio.addEventListener('canplay', () => console.log('Audio can play'));
+                audio.addEventListener('playing', () => console.log('Audio started playing'));
+                audio.addEventListener('pause', () => console.log('Audio paused'));
+                audio.addEventListener('stalled', () => console.log('Audio stalled'));
+                audio.addEventListener('suspend', () => console.log('Audio suspended'));
+                audio.addEventListener('abort', () => console.log('Audio aborted'));
+                audio.addEventListener('emptied', () => console.log('Audio emptied'));
+                
+                return audio.play().catch(playError => {
+                    console.warn('Audio play failed, likely due to autoplay policy:', playError);
+                    
+                    // If it's an autoplay policy error, fall back to browser speech synthesis
+                    if (playError.name === 'NotAllowedError' && playError.message.includes('user didn\'t interact')) {
+                        console.log('Autoplay blocked, falling back to browser speech synthesis');
+                        
+                        // Clean up the audio resources
+                        clearTimeout(timeout);
+                        clearTimeout(loadTimeout);
+                        URL.revokeObjectURL(audioUrl);
+                        this.pendingAudio = null; // Clear tracking
+                        
+                        // Use browser speech synthesis as fallback
+                        if (this.speechSynthesis && this.voiceOutputEnabled) {
+                            this.speechSynthesis.cancel();
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            utterance.rate = this.voiceSpeed;
+                            utterance.pitch = 1.0;
+                            utterance.volume = 0.8;
+                            
+                            // Try to use a female voice
+                            const voices = this.speechSynthesis.getVoices();
+                            const femaleVoice = voices.find(voice => 
+                                voice.lang.includes('en') && 
+                                (voice.name.includes('female') || voice.name.includes('Samantha') || voice.name.includes('Victoria'))
+                            );
+                            
+                            if (femaleVoice) {
+                                utterance.voice = femaleVoice;
+                            }
+                            
+                            utterance.onend = () => {
+                                console.log('Browser speech synthesis completed for:', text);
+                                resolve();
+                            };
+                            
+                            utterance.onerror = (e) => {
+                                console.error('Browser speech synthesis error:', e);
+                                reject(e);
+                            };
+                            
+                            this.speechSynthesis.speak(utterance);
+                            return;
+                        }
+                    }
+                    
+                    // For other errors, reject normally
+                    throw playError;
+                });
+            })
+            .catch(error => {
+                console.error('Error playing Azure TTS audio:', error);
+                clearTimeout(timeout);
+                this.pendingAudio = null; // Clear tracking on error
+                reject(error);
+            });
+        });
     }
     
     formatMessage(text) {
@@ -653,35 +923,23 @@ class NIYAsaathiApp {
         
         this.hideHistory();
     }
+
+    // Stop current audio
+    stopCurrentAudio() {
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio.currentTime = 0;
+            this.currentAudio = null;
+        }
+        
+        // Cancel any ongoing speech synthesis
+        if (this.speechSynthesis) {
+            this.speechSynthesis.cancel();
+        }
+    }
 }
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new NIYAsaathiApp();
 });
-
-function sendMessage(userInput) {
-  fetch('http://localhost:5000/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: userInput })
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Display the text
-    document.getElementById('response').innerText = data.text;
-
-    // Play the audio
-    fetch('http://localhost:5000/speak', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: data.text })
-    })
-    .then(res => res.blob())
-    .then(blob => {
-      const audioUrl = URL.createObjectURL(blob);
-      const audio = new Audio(audioUrl);
-      audio.play();
-    });
-  });
-}

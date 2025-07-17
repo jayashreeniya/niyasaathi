@@ -41,9 +41,9 @@ TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')
 
 # Firebase init
 try:
-cred = credentials.Certificate('firebase_credentials.json')
-initialize_app(cred)
-db = firestore.client()
+    cred = credentials.Certificate('firebase_credentials.json')
+    initialize_app(cred)
+    db = firestore.client()
 except Exception as e:
     print(f"Firebase initialization error: {e}")
     # For development, create a mock database
@@ -319,7 +319,7 @@ def get_user_data_endpoint(current_user_id):
 def handle_message(current_user_id):
     """Handle incoming message and generate response"""
     try:
-    data = request.json
+        data = request.json
         user_message = data.get('message', '').strip()
         
         if not user_message:
@@ -393,7 +393,7 @@ def handle_message(current_user_id):
 def save_state(current_user_id):
     """Save user state"""
     try:
-    data = request.json
+        data = request.json
         user_data = get_user_data(current_user_id)
         user_data.update(data)
         user_data['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds')

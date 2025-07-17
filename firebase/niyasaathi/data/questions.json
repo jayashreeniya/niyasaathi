@@ -1,0 +1,108 @@
+{
+  "screening": {
+    "q1": {
+      "question": "Hi there, I'm NIYAsaathi. I'm here to walk with you through something that's real, tender, and often unspoken—loneliness. Let's take it one step at a time, together. Have you been feeling lonely recently?",
+      "type": "yes_no",
+      "next": "q2",
+      "branch": null
+    },
+    "q2": {
+      "question": "Thank you for sharing that with me. Can you tell me a bit more about what loneliness feels like for you?",
+      "type": "open",
+      "next": "q3",
+      "branch": null
+    },
+    "q3": {
+      "question": "When do you tend to notice these feelings of loneliness the most?",
+      "type": "open",
+      "next": "q4",
+      "branch": null
+    },
+    "q4": {
+      "question": "How long have you been experiencing these feelings?",
+      "type": "open",
+      "next": "q5",
+      "branch": null
+    }
+  },
+  "impact": {
+    "q5": {
+      "question": "How has this loneliness been affecting your daily life?",
+      "type": "open",
+      "next": "q6",
+      "branch": null
+    },
+    "q6": {
+      "question": "What activities or moments that used to bring you joy feel different now?",
+      "type": "open",
+      "next": "q7",
+      "branch": null
+    },
+    "q7": {
+      "question": "How has this impacted your relationships with others?",
+      "type": "open",
+      "next": "q8",
+      "branch": null
+    }
+  },
+  "causes": {
+    "q8": {
+      "question": "What do you think might be contributing to these feelings of loneliness?",
+      "type": "open",
+      "next": "q9",
+      "branch": null
+    },
+    "q9": {
+      "question": "Have there been any recent changes in your life that might be connected to this?",
+      "type": "open",
+      "next": "q10",
+      "branch": null
+    },
+    "q10": {
+      "question": "Do you find it difficult to connect with others in social situations?",
+      "type": "yes_no",
+      "next": "branch_social_anxiety",
+      "branch": "social_anxiety"
+    }
+  },
+  "branch_social_anxiety": {
+    "q11": {
+      "question": "I understand that social situations can be challenging. What specifically makes social interactions difficult for you?",
+      "type": "open",
+      "next": "q12",
+      "branch": "social_anxiety"
+    },
+    "q12": {
+      "question": "How do you typically feel before, during, and after social gatherings?",
+      "type": "open",
+      "next": "q13",
+      "branch": "social_anxiety"
+    },
+    "q13": {
+      "question": "What would it feel like to take one small step toward connection this week?",
+      "type": "open",
+      "next": "intervention_social_anxiety",
+      "branch": "social_anxiety"
+    }
+  },
+  "branch_relationship_loss": {
+    "q14": {
+      "question": "I hear that you've experienced a significant loss. Can you tell me more about this relationship and what it meant to you?",
+      "type": "open",
+      "next": "q15",
+      "branch": "relationship_loss"
+    },
+    "q15": {
+      "question": "How has this loss changed the way you see yourself and your world?",
+      "type": "open",
+      "next": "q16",
+      "branch": "relationship_loss"
+    },
+    "q16": {
+      "question": "What kind of support would feel most helpful to you right now?",
+      "type": "open",
+      "next": "intervention_relationship_loss",
+      "branch": "relationship_loss"
+    }
+  }
+} 

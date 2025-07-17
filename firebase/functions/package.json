@@ -14,8 +14,10 @@
     "node": "18"
   },
   "dependencies": {
+    "@google-cloud/text-to-speech": "^5.8.1",
     "firebase-admin": "^11.11.0",
     "firebase-functions": "^4.5.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.45.0",
     "twilio": "^4.19.0"
   },
   "devDependencies": {

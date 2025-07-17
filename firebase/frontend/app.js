@@ -12,6 +12,10 @@ class NIYAsaathiApp {
         this.speechSynthesis = window.speechSynthesis;
         this.isRecording = false;
         this.isTyping = false;
+        this.userHasInteracted = false;
+        this.pendingAudio = null;
+        this.lastMessageTimestamp = null;
+        this.currentAudioRequest = null;
         
         // Firebase Functions URLs - will be replaced with actual URLs after deployment
         this.API_BASE_URL = 'https://us-central1-niyasaathi-loneliness-coach.cloudfunctions.net'; // Firebase project ID
@@ -45,10 +49,14 @@ class NIYAsaathiApp {
         });
         
         // Chat
-        document.getElementById('send-btn').addEventListener('click', () => this.sendMessage());
+        document.getElementById('send-btn').addEventListener('click', () => {
+            this.userHasInteracted = true;
+            this.sendMessage();
+        });
         document.getElementById('message-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                this.userHasInteracted = true;
                 this.sendMessage();
             }
         });
@@ -221,8 +229,7 @@ class NIYAsaathiApp {
         document.getElementById('chat-screen').classList.add('active');
         document.getElementById('user-phone').textContent = this.currentUser.phone_number;
         
-        // Show welcome message
-        this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?');
+        // Don't show welcome message here - let loadUserData handle it
     }
     
     async loadUserData() {
@@ -236,9 +243,16 @@ class NIYAsaathiApp {
             if (response.ok) {
                 const data = await response.json();
                 this.userData = data.user_data;
-                // Resume conversation from where user left off
+                
+                // Check if user has conversation history
+                const hasConversationHistory = this.userData.conversation_history && this.userData.conversation_history.length > 0;
+                
                 if (this.userData.last_coach_message) {
-                    this.addMessage('coach', this.userData.last_coach_message);
+                    // User has a last coach message (returning user) - play it
+                    this.addMessage('coach', this.userData.last_coach_message, true);
+                } else {
+                    // First-time user - show welcome message and play it
+                    this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?', true);
                 }
             }
         } catch (error) {
@@ -252,10 +266,15 @@ class NIYAsaathiApp {
         
         if (!message || this.isTyping) return;
         
-        // Add user message to chat
-        this.addMessage('user', message);
+        // Stop any playing audio when user sends a message
+        this.stopAllAudio();
+        
+        // Clear input and disable send button
         input.value = '';
         this.updateSendButton();
+        
+        // Add user message to chat
+        this.addMessage('user', message);
         
         // Show typing indicator
         this.showTypingIndicator();
@@ -297,6 +316,13 @@ class NIYAsaathiApp {
     }
     
     addMessage(sender, text, playBackendAudio = false) {
+        console.log('=== ADD MESSAGE CALLED ===');
+        console.log('Sender:', sender);
+        console.log('Text:', text);
+        console.log('PlayBackendAudio:', playBackendAudio);
+        console.log('VoiceOutputEnabled:', this.voiceOutputEnabled);
+        console.log('==========================');
+        
         const messagesContainer = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}`;
@@ -318,31 +344,109 @@ class NIYAsaathiApp {
         
         // Play backend audio if enabled and it's from coach
         if (sender === 'coach' && this.voiceOutputEnabled && playBackendAudio) {
-            fetch('/speak', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text })
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            // Stop any existing audio first
+            this.stopAllAudio();
+            
+            // Cancel any ongoing audio request
+            if (this.currentAudioRequest) {
+                console.log('Cancelling previous audio request');
+                this.currentAudioRequest = null;
+            }
+            
+            // Generate a simple timestamp for this message
+            const messageTimestamp = Date.now();
+            this.lastMessageTimestamp = messageTimestamp;
+            
+            console.log('Generated message timestamp:', messageTimestamp, 'for text:', text);
+            
+            // Simple delay to ensure DOM is updated
+            setTimeout(() => {
+                // Only play audio if this is still the most recent message
+                if (this.lastMessageTimestamp !== messageTimestamp) {
+                    console.log('This is no longer the most recent message, skipping audio playback for timestamp:', messageTimestamp);
+                    return;
                 }
-                return res.blob();
-            })
-            .then(blob => {
-                const audioUrl = URL.createObjectURL(blob);
-                const audio = new Audio(audioUrl);
-                audio.play().catch(error => {
-                    console.error('Error playing Azure TTS audio:', error);
+                
+                console.log('This is the most recent message, playing audio for timestamp:', messageTimestamp, 'Text:', text);
+                
+                // Create a unique request ID to prevent duplicates
+                const requestId = Date.now() + Math.random();
+                this.currentAudioRequest = requestId;
+                
+                // Use the relative path - Firebase hosting will rewrite this to the function
+                fetch('/speak', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                })
+                .then(res => {
+                    // Check if this request is still current
+                    if (this.currentAudioRequest !== requestId) {
+                        console.log('Audio request superseded, aborting');
+                        return;
+                    }
+                    
+                    console.log('Google TTS response status:', res.status);
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                    }
+                    return res.blob();
+                })
+                .then(blob => {
+                    // Check if this request is still current
+                    if (this.currentAudioRequest !== requestId) {
+                        console.log('Audio request superseded, aborting blob processing');
+                        return;
+                    }
+                    
+                    console.log('Google TTS blob received, size:', blob.size, 'bytes');
+                    const audioUrl = URL.createObjectURL(blob);
+                    const audio = new Audio(audioUrl);
+                    this.pendingAudio = audio;
+                    
+                    audio.play().catch(error => {
+                        // Check if this request is still current
+                        if (this.currentAudioRequest !== requestId) {
+                            console.log('Audio request superseded, not falling back to browser TTS');
+                            return;
+                        }
+                        
+                        console.error('Google TTS audio play failed:', error);
+                        console.error('Error name:', error.name);
+                        console.error('Error message:', error.message);
+                        // Fallback to browser TTS
+                        console.log('Falling back to browser TTS due to play error');
+                        this.speakMessage(text);
+                    });
+                    
+                    audio.addEventListener('ended', () => {
+                        console.log('Google TTS audio playback completed');
+                        URL.revokeObjectURL(audioUrl);
+                        this.pendingAudio = null;
+                        this.currentAudioRequest = null;
+                    });
+                    
+                    audio.addEventListener('error', (e) => {
+                        console.error('Google TTS audio error event:', e);
+                        console.error('Audio error details:', audio.error);
+                    });
+                })
+                .catch(error => {
+                    // Check if this request is still current
+                    if (this.currentAudioRequest !== requestId) {
+                        console.log('Audio request superseded, not falling back to browser TTS');
+                        return;
+                    }
+                    
+                    console.error('Google TTS fetch failed:', error);
+                    console.error('Error name:', error.name);
+                    console.error('Error message:', error.message);
                     // Fallback to browser TTS
+                    console.log('Falling back to browser TTS due to fetch error');
                     this.speakMessage(text);
+                    this.currentAudioRequest = null;
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching Azure TTS:', error);
-                // Fallback to browser TTS
-                this.speakMessage(text);
-            });
+            }, 100); // Shorter delay - just enough for DOM update
         } else if (sender === 'coach' && this.voiceOutputEnabled) {
             // Use browser TTS as fallback or when backend audio is disabled
             this.speakMessage(text);
@@ -653,35 +757,33 @@ class NIYAsaathiApp {
         
         this.hideHistory();
     }
+
+    // Stop all audio
+    stopAllAudio() {
+        console.log('Stopping all audio');
+        
+        // Cancel any ongoing speech synthesis
+        if (this.speechSynthesis) {
+            this.speechSynthesis.cancel();
+        }
+        
+        // Stop any pending audio
+        if (this.pendingAudio) {
+            console.log('Stopping current audio playback');
+            this.pendingAudio.pause();
+            this.pendingAudio.currentTime = 0;
+            this.pendingAudio = null;
+        }
+        
+        // Clear current audio request
+        if (this.currentAudioRequest) {
+            console.log('Clearing current audio request');
+            this.currentAudioRequest = null;
+        }
+    }
 }
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new NIYAsaathiApp();
 });
-
-function sendMessage(userInput) {
-  fetch('http://localhost:5000/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: userInput })
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Display the text
-    document.getElementById('response').innerText = data.text;
-
-    // Play the audio
-    fetch('http://localhost:5000/speak', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: data.text })
-    })
-    .then(res => res.blob())
-    .then(blob => {
-      const audioUrl = URL.createObjectURL(blob);
-      const audio = new Audio(audioUrl);
-      audio.play();
-    });
-  });
-}

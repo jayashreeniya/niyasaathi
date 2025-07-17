@@ -1,0 +1,1186 @@
+[
+    {
+        "id": "part1_intro",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "Hi there. Thanks for being here with me. If it's okay with you, I'd like to spend a little time gently exploring something many people feel, but few talk about: loneliness. There's no pressure to figure anything out—we're just going to explore it together. Does that sound okay to you?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_feeling_lonely",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "Thank you. To begin with—would you say you've been feeling lonely recently?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_describe_loneliness",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "I appreciate you being honest. Loneliness can show up in ways that aren't always obvious—it's not just about being physically alone. If you were to describe your loneliness in your own words, how would you put it?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_when_notice",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "That's a powerful way to describe it. Loneliness can feel like a fog, a weight, or even like being surrounded but unseen. When do you tend to notice it most? Is it during certain parts of the day or week?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_what_do_when_lonely",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "I see. And what do you usually feel like doing when the loneliness hits—do you retreat, try to connect, distract yourself, or something else?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_feeling_duration",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "Thanks for sharing that. Would you say this feeling has been there for a while, or is it something new?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_color_shape_sound",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "That's helpful to know. If your loneliness had a color, a shape, or even a sound, what would it be?",
+        "user_response": ""
+    },
+    {
+        "id": "part1_impact_intro",
+        "section": "Gentle Screening & Awareness",
+        "prompt": "That's such a vivid image. Let's shift a little now—I'd love to understand how this loneliness is impacting you, if you're comfortable talking about it.",
+        "user_response": ""
+    },
+    {
+        "id": "part2_daily_life",
+        "section": "Impact of Loneliness",
+        "prompt": "Let's start with daily life. Has your loneliness affected your sleep, appetite, energy, or motivation in any noticeable ways?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_constant_or_come_go",
+        "section": "Impact of Loneliness",
+        "prompt": "That sounds really tough. Do you feel this loneliness is constant, or does it come and go?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_with_others",
+        "section": "Impact of Loneliness",
+        "prompt": "And when you're around other people, does it help ease the feeling—or does the loneliness still linger, even in company?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_withdrawal",
+        "section": "Impact of Loneliness",
+        "prompt": "That's important to notice. Sometimes loneliness isn't about presence, but about connection. Have you found yourself withdrawing from people or situations because of this feeling?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_sense_of_self",
+        "section": "Impact of Loneliness",
+        "prompt": "Thanks for sharing that. Let's talk about how it affects your sense of self. Does your loneliness ever make you feel like you're less visible, or that you don't matter as much?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_recurring_thoughts",
+        "section": "Impact of Loneliness",
+        "prompt": "That's such a painful feeling to sit with. Do you find yourself having any recurring thoughts when you feel lonely—like 'No one gets me,' or 'I must be doing something wrong'?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_cost_of_loneliness",
+        "section": "Impact of Loneliness",
+        "prompt": "You're not alone in those thoughts. They make sense when someone's been feeling disconnected. If you were to describe what loneliness has been costing you, emotionally or mentally, what would you say?",
+        "user_response": ""
+    },
+    {
+        "id": "part2_look_behind",
+        "section": "Impact of Loneliness",
+        "prompt": "That's incredibly insightful. Now that we've explored the impact, would it feel okay to look at what might be behind the loneliness?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_intro",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "Loneliness can be caused by many things—not always obvious, and often layered. Let me share some common reasons people experience loneliness, and you can tell me if any of these resonate with your situation:\n Changes in relationships – like breakups, divorce, friendship drift\n Moving – to a new city, job, college, or country\n Social anxiety – difficulty initiating or maintaining connections\n Lack of emotional intimacy – being surrounded by people but not feeling close to anyone\n Different life stage – feeling out of sync with your peers (e.g., single when others are married)\n Digital disconnection – lots of online interaction but little meaningful connection\n Unprocessed grief – losing someone and not having space to mourn\n Feeling misunderstood – like you have to hide parts of yourself\n Not feeling chosen – like you're always the one reaching out, but no one checks in first\n Low self-worth – believing you're not interesting or worthy enough to be close to others\nDo any of these strike a chord with you?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_acknowledge",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "Thank you for identifying that. It takes courage. Sometimes, it's not even one clear reason—but a mix of several small changes that build up. Has anything shifted in your environment or your relationships in the past few months?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_changes",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "Those changes sound significant. Sometimes, we go through transitions silently—and only later realize how much they've affected us. Are there any people or relationships you've been missing more than usual?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_missing",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "Longing for someone can make even loud rooms feel quiet. Do you ever stop yourself from reaching out because you're afraid of being a burden—or not getting the response you need?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_reaching_out",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "That fear is so understandable. One last reflection—if your loneliness could say one sentence to you, what do you think it would want you to hear?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_wrapup",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "You've been really brave in exploring all of this today. I know it's not easy to sit with these feelings. Would you be open to continuing this next time—or exploring ways to feel even slightly more connected again?",
+        "user_response": ""
+    },
+    {
+        "id": "explore_causes_closing",
+        "section": "Exploring Causes of Loneliness",
+        "prompt": "I'll be right here when you're ready. Until then, please remember: loneliness is not a flaw. It's a signal—of your desire for real connection, of your emotional depth. You're not alone in feeling this way. And you don't have to face it all by yourself.",
+        "user_response": ""
+    },
+    {
+        "id": "rel_change_intro",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Hi again. I want to start by acknowledging how deeply relationship changes can echo into our day-to-day life. Even if the connection is gone, the habits, the feelings, the memories… they linger. Before we go into anything structured—has anything felt different since our last conversation? Even slightly?",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_checkin",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Thanks for sharing that. Even small shifts deserve to be noticed. I thought we could try a few things together today—not big tasks, but gentle ways to check in with yourself. Some we can do right here. Others you can return to later, across your day or week. No pressure to get it right. Just room to feel what's there. Would that be okay?",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_grounding_body",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Let's begin small. You don't have to change how you feel—just make space for what's present. Could we pause for a moment? Where are you holding this loneliness in your body right now? Is it in your chest? Your jaw? Your stomach?",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_grounding_breath",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Thank you. That awareness matters. Now gently—just notice that part of your body. You don't need to fix it. Let's breathe into that space together. A slow inhale… 2… 3… And exhale… 2… 3… One more time, if that's okay?",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_grounding_acknowledge",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "There's no goal here except to make room for what's here. Loneliness softens slightly when we stop avoiding it—and just acknowledge: 'This is what I'm feeling right now.'",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_short_reflection",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "If you have a little time today—maybe after this conversation or later tonight—try this small practice: Find a piece of paper or your notes app. Start by writing: 'One thing I miss about that relationship is…' 'One thing that still hurts is…' 'One thing I did right in that connection was…' You don't have to finish all at once. Even sitting with just one of these can help you name what's been left unsaid inside. Would you like me to check in tomorrow to see how that felt?",
+        "user_response": "",
+        "action_item": true
+    },
+    {
+        "id": "rel_change_short_reflection_followup",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Great. I'll gently revisit it with you. And remember—this is not about emotional performance. It's about witnessing your experience honestly.",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_longer_exercise",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Over the next day, I'd love to offer you this gentle experiment: Think of one small activity that you used to associate with that person—something you stopped doing because it reminded you of them. It could be: • A meal you shared • A place you used to go • A show or song you both loved • A time of day you used to talk. Now try doing it on your own—but with a small shift. Light a candle. Add music. Make tea. Go with a friend. Reclaim it—not to erase them, but to remind yourself: 'This still belongs to me.' Want to try that sometime this week?",
+        "user_response": "",
+        "action_item": true
+    },
+    {
+        "id": "rel_change_longer_exercise_followup",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Whenever you do it—take a moment after and ask: • Did it feel tender? • Was it harder than expected? • Did anything new come up? We'll talk about it next time if you'd like.",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_week_journal",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Here's something gentle to do across the week if you'd like—a kind of journal, but with just one question a day. You can even send your responses to me if you'd like a space to reflect together. • Day 1: What's something I still carry from that relationship (good or hard)? • Day 2: What version of myself was most visible in that connection? • Day 3: What did I give in that relationship that I can also give to myself? • Day 4: What do I fear about forming new connections now? • Day 5: What would it mean to feel 'safe' in connection again? You don't have to do them perfectly or in order. Even doing one or two might open something helpful. Would you like a reminder midweek?",
+        "user_response": "",
+        "action_item": true
+    },
+    {
+        "id": "rel_change_collab_practice",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "And if it feels okay—here's something we can do together right now. I'll say a sentence, and you can complete it—no pressure to be poetic. Just honest. 'If I could say one last thing to them without fear, it would be…'",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_collab_practice_followup",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "Thank you for trusting that space. Now a follow-up just for you: 'What do I want to say to myself in this moment instead?'",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_healing_shift",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "That shift—from them to you—is part of what healing slowly looks like. It doesn't have to be loud. It just needs to be real. Would it feel helpful if I offered one of these practices again next time—or something lighter?",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "rel_change_closing",
+        "section": "Intervention: Loneliness After Relationship Changes",
+        "prompt": "No matter what pace you choose, I'll walk with you. You don't have to rush your grief. And your loneliness doesn't mean you're failing—it means something mattered. Let's keep creating space for that.",
+        "user_response": "",
+        "action_item": false
+    },
+    {
+        "id": "relationship_loss_followup_intro",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Thanks for choosing to explore this. When relationships shift or fade, it can feel like losing part of our emotional home. What relationship comes to mind when you think about a change that still feels significant?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_acknowledge",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That sounds like someone who mattered a lot. I can imagine this isn't easy to talk about.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_how_used_to_feel",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "How did this relationship used to feel when things were still close or connected?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_missing_connection",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "It makes sense that you'd miss something that made you feel that way. That kind of connection can leave a real mark.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_sudden_or_slow",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Was the change something that happened suddenly, or did it feel more like a slow, quiet shift?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_transition",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Either way, that kind of transition can stir up a lot of uncertainty. You're not alone in feeling disoriented by it.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_realization",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Do you remember the moment you first realized things weren't the same?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_realization_acknowledge",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That kind of realization can linger for a long time. Thank you for naming it.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_emotions",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "What emotions came up for you around that time? Even if it's messy—anger, sadness, relief—whatever it was is welcome here.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_emotions_validate",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That's completely valid. Emotions in these moments can feel big and confusing. You're doing really well just naming them.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_role",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "What role did this person play in your life? Were they someone who made you feel seen or safe?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_meaningful_space",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "It sounds like they held a meaningful space in your life. That kind of presence can be hard to replace.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_parts_alive",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "What parts of yourself felt most alive or accepted when you were with them?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_version_exists",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That version of you still exists. Even if it feels buried right now, it's real and worth reconnecting with.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_space_to_show",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Do you feel like those parts of you still have space to show up in your life? Or do they feel a bit quieter now?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_tucking_away",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That makes sense. We often tuck parts of ourselves away when connection feels uncertain or painful.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_miss_most",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "When you think about what you miss most—what rises to the top? Is it them, the dynamic, or who you got to be in that relationship?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_missing_shapes",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Missing can take so many shapes. There's no wrong answer here—it's all part of the story.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_closure",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Was there any closure in the relationship? Or did it feel like something unresolved was left hanging?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_unfinished_endings",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Unfinished endings can echo for a long time. They often leave more questions than answers.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_replaying",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Do you ever catch yourself re-playing specific conversations or memories with them?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_mental_loop",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That kind of mental loop can be exhausting. And also totally human. You're not weird or broken for doing that.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_understood",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Do you feel like people around you understand the weight of what this loss meant to you?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_unseen_pain",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Feeling unseen in your pain adds another layer to the loneliness. You deserve space for this to be felt.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_connecting_others",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Have you noticed any changes in how you connect with others since then—maybe more guardedness, or pulling back?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_protect_heart",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "It's okay to protect your heart after it's been hurt. That's not weakness—it's care.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_blame",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Is there anything you find yourself blaming yourself for when you think about how things changed?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_gentle_with_self",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Be gentle with yourself here. You're holding a lot. And blame is often grief in disguise.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_younger_self",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "What would you tell your younger self—the one who was still in the middle of this relationship, before it changed?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_tenderness",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That's a powerful message. You're showing so much tenderness toward yourself already.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_wish_someone_say",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "What do you wish someone could say to you now?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_longing",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That longing says something deep about what you need—and deserve. Thank you for naming it.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_connection_value",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Despite the pain, what does this experience show you about the kind of connection you value most?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_emotional_depth",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That says so much about your emotional depth. The kind of connection you're wired for is rare and beautiful.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_grieve",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Do you feel like you've had space to truly grieve what this relationship meant to you?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_grief_voice",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Sometimes just being asked that question is the beginning of grief finding its voice.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_healing_shape",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "If healing had a shape or texture for you—what would it look or feel like right now?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_healing_yours",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "That image says a lot. Healing doesn't need to be fast—it just needs to be yours.",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_explore_or_shift",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Would you want to keep exploring this space together? Or maybe gently shift toward rediscovering trust and belonging again?",
+        "user_response": ""
+    },
+    {
+        "id": "relationship_loss_followup_presence",
+        "section": "Follow-up: Loneliness Due to Changes in Relationships",
+        "prompt": "Wherever you are, I'm here to move at your pace. No pressure. Just presence.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_intro",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Transitions can feel exciting on the outside… but incredibly lonely on the inside. What kind of move have you recently gone through?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_shift_self",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "That kind of shift changes more than just your location—it can touch your whole sense of self.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_miss_most",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What do you miss most about the place or environment you left?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_missing_pieces",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Missing those pieces is completely natural. They were part of your rhythm and your emotional world.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_chose_or_necessary",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Was this move something you chose, or something that felt necessary—or maybe both?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_weight_choices",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Either way, it sounds like there was weight behind it. These choices—even when \"right\"—can feel really heavy.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_familiar_grounding",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What felt familiar or grounding in your old life that feels missing now?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_grieve_home",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "It's okay to grieve what felt like home—even if you're \"supposed\" to be excited.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_out_of_place",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Have there been moments in the new place where you felt especially out of place or invisible?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_unseen_moments",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Those moments can sting in a quiet, aching way. Feeling unseen can be its own kind of loneliness.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_start_over_hard",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What's been the hardest part about trying to \"start over\" here?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_real_part",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "That's such a real part of transition—what nobody talks about enough. Thank you for naming it.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_pressure_fine",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Do you feel pressure to act like everything's fine, even if it isn't?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_courage_admitting",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "There's so much courage in admitting that. You don't have to wear the \"I've got it all figured out\" mask here.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_found_anyone",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Have you found anyone—online, in person, even briefly—who makes you feel a little less alone?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_tiny_anchors",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Even tiny moments of connection matter. They're small anchors in unfamiliar waters.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_hardest_spaces",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What are the spaces (physical or emotional) that feel hardest to adjust to in this new chapter?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_adjusting_exhausting",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Adjusting can be exhausting—not just physically, but emotionally too. It's okay if it's taking time.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_comparing",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Do you ever find yourself comparing your current life to the one you left behind?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_comparison_grief",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Comparison is a natural part of grief. It doesn't mean you made the wrong choice—it just means something meaningful was left behind.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_routines_rituals",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Are there small routines or rituals from your old life that you haven't been able to recreate here?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_comfort_habits",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Those routines are more than habits—they're forms of comfort. It's okay to miss them deeply.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_parts_lost",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What parts of you feel lost or quieter since the move?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_parts_quiet",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Those parts deserve space again. We don't lose ourselves forever—sometimes we just go quiet until it's safe again.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_long_for_most",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What do you long for the most right now—companionship, familiarity, understanding, or something else?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_longing_beautiful",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Longing is a sign of something beautiful you're wired for. That need doesn't make you weak—it makes you human.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_unexpected_joy",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Have there been any unexpected moments of joy or relief here, even if brief?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_glimmers_matter",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Those glimmers matter. Even if they're tiny. They're little reminders that not all is lost.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_wish_asked",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "What do you wish someone would ask you about your experience since the move?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_hand_reaching",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Sometimes the right question can feel like a hand reaching out in the dark. I'm glad we're holding that space here.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_permission_feel",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Is there something you want to give yourself permission to feel—but haven't yet?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_welcome_feeling",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Whatever that feeling is—it's welcome. You don't have to silence it anymore.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_identity_challenged",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Do you feel like parts of your identity feel different—or even challenged—since the move?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_change_mirror",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "It's powerful to notice that. Moves don't just change our environment… they often change our mirror too.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_unsaid",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Are there things you haven't said out loud yet about this transition that deserve to be spoken?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_healing_naming",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "There's something healing about naming what's been unsaid. Thank you for trusting this space.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_loneliness_voice",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "If this loneliness had a voice, what do you think it would say?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_voice_truth",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "That voice carries truth. It's speaking for the parts of you trying to adapt, hold on, and make sense of it all.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_imagine_settled",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "When you imagine feeling \"settled\" again—even just a little—what does that picture look like?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_powerful_compass",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "That image is a powerful compass. Even if you're not there yet, it gives you something to gently move toward.",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_explore_or_rebuild",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Would you like to keep reflecting here… or maybe start imagining ways to rebuild connection where you are?",
+        "user_response": ""
+    },
+    {
+        "id": "moving_followup_no_timeline",
+        "section": "Follow-up: Loneliness After Moving",
+        "prompt": "Whatever pace you choose—I'm here to meet you there. There's no timeline for belonging.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_intro",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Sometimes loneliness isn't about not having people around—it's about feeling like there's an invisible wall between you and them. Can you tell me a little about what social situations feel hardest for you?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_makes_sense",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That makes a lot of sense. Situations like that can make your body feel tense, even before they begin.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_thoughts_before",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "What usually goes through your mind right before you're about to talk to someone or join a group?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_loud_thoughts",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Those thoughts can feel so loud, can't they? Like they're already predicting how things might go wrong.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_specific_settings",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Are there specific settings—like work, school, or even casual hangouts—where your anxiety feels more intense?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_valid_pressure",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "It's valid to feel that some places or groups carry more pressure than others. You're not alone in that.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_push_through",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Have you ever tried to push through the anxiety, even when it felt overwhelming? What was that experience like?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_courage",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That takes so much courage. Whether it went well or not, the fact that you tried says a lot about your strength.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_scariest_part",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "When you think about forming new friendships or connections, what's the scariest part?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_protective",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Fears like that often come from past pain or deep insecurities. It's okay to be protective of your heart.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_misunderstood",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Have there been situations where you felt misunderstood—or judged—for being quieter or reserved?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_invisible_hurt",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That feeling of being misunderstood can hurt just as much as being alone. It's valid to carry that with you.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_body_feelings",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "What does it feel like in your body when social anxiety hits—tight chest, racing thoughts, frozen stillness?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_body_tension",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Our bodies carry the tension before we even find the words. I hear you—it's not just \"in your head.\"",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_safer_spaces",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Is there a version of socializing that feels safer or easier for you—maybe texting, one-on-one chats, or online spaces?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_softer_spaces",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That's important to notice. Those softer spaces are just as valid and real.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_overthinking",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Do you ever find yourself overthinking something you said… hours or even days later?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_mental_replay",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That mental replay can be exhausting. You're not alone in that cycle—and it doesn't mean you said anything wrong.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_safe_person",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "When you're with someone who truly makes you feel safe, how do you behave differently?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_safety_opens",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That version of you deserves more space. Safety lets us open up—slowly, naturally, in our own time.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_reach_out",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Have there been moments where you wished you could reach out, but something inside stopped you?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_self_protection",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That hesitation often carries so much self-protection. You're not \"lazy\" or \"uninterested\"—you're cautious for a reason.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_assume_others",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "What do you usually assume others are thinking about you when you're in a group setting?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_old_stories",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Those assumptions can feel so real in the moment. But they often come from older stories—not necessarily present truth.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_too_much_not_enough",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "When you do try to connect, do you worry more about being too much… or not enough?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_tug_of_war",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That tug-of-war between \"too much\" and \"not enough\" is something many people with social anxiety feel. I'm so glad you shared that.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_open_up",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Is there someone you wish you could open up to—but don't know how to start?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_build_bridge",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That desire means there's hope. We can build that bridge gently, one plank at a time.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_better_expected",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Do you remember a time—no matter how small—where a social interaction actually went better than you expected?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_seed",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Even one moment like that is a seed. It tells a different story than the one anxiety tries to write.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_say_to_others",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "What would you say to someone else who feels the same fear and loneliness that you do?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_compassion",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Sometimes we speak more kindly to others than we do to ourselves. Your words carry compassion that you also deserve.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_connection_meaning",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "What does connection mean to you—not the textbook definition, but your personal one?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_valid_definition",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That definition is so valid. You get to decide what connection feels like—not what others say it \"should\" be.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_imagine_confident",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "When you imagine feeling more confident socially, what's different in how you carry yourself or connect?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_version_exists",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "That version of you exists—already inside. They're just waiting for the right conditions to bloom.",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_explore_steps",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Would you like to reflect a little more, or explore small, realistic steps toward connection—even with anxiety?",
+        "user_response": ""
+    },
+    {
+        "id": "social_anxiety_followup_your_pace",
+        "section": "Follow-up: Social Anxiety & Loneliness",
+        "prompt": "Whatever your pace is—whether it's one step or simply sitting with this—I'm right here with you.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_intro",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Sometimes the hardest loneliness is the kind that shows up even when you're not physically alone. Can I ask… when you're with others, what part of you stays hidden?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_deserves_seen",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That part deserves to be seen, even if it's been tucked away for a long time.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_see_not_know",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Do you ever feel like people see you—but don't really know you?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_wearing_mask",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That disconnect can feel heavy—like wearing a mask that no one notices.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_stops_opening",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "What stops you from opening up more deeply with the people around you?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_emotional_safety",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That makes so much sense. Emotional intimacy often asks for safety—and not everyone earns that.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_truly_got_you",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Can you remember the last time someone truly got you—without needing to explain too much?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_reminds_possible",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Even if it was rare or long ago, moments like that remind us what's possible.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_listening_more",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Do you find yourself listening to others a lot more than being heard?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_heart_quiet",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Being the listener can be comforting for others… but lonely when your heart stays quiet.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_respond_unseen",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "How do you usually respond when you're feeling unseen—do you withdraw, pretend, keep going?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_protect_survive",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Whatever your instinct is—it likely began as a way to protect yourself. You're doing what you needed to survive.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_closeness_meaning",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "What does emotional closeness mean to you—not what others say, but your own definition?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_depth_not_quantity",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That's such an honest answer. Emotional intimacy isn't about quantity—it's about depth.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_too_much_handle",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Do you ever feel like you're too much—or not enough—for people to handle emotionally?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_not_too_much",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That fear lives in a lot of hearts. You're not too much. And you're definitely not too little.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_vulnerable_shut_down",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Have you ever tried to be vulnerable with someone and felt shut down or dismissed?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_moment_stays",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That kind of moment stays with you. It can make opening up again feel so risky.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_should_close",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Are there people in your life who should feel close, but don't?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_loneliest_places",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That gap between expectation and reality can be one of the loneliest places.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_body_mood",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "When you're feeling emotionally disconnected, how does that show up in your body or mood?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_bodies_carry",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Sometimes our bodies carry the weight before our words even catch up.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_surprised_lonely",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Do you think people would be surprised to know how lonely you feel sometimes?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_invisible_ache",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That invisible ache often hides behind smiles, routines, and \"I'm fine.\" You don't need to pretend here.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_long_to_say",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "What do you long to say out loud—but haven't found the right person or moment to share it?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_matters_heard",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Whatever you just thought of—it matters. And you deserve a space where it can be heard.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_patterns_friendships",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Have you noticed patterns in your friendships or relationships—like how emotionally close they tend to go?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_insight_patterns",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "There's insight in patterns. Sometimes they're shaped by the roles we've learned to play.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_hidden_parts",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Are there parts of yourself you rarely, if ever, share with anyone?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_tender_pieces",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Those hidden parts don't make you less worthy of love. They're often the most tender, real pieces.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_wish_connection",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "What kind of emotional connection do you wish you had?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_not_too_much",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That vision matters. It's not too much to want to feel seen, known, and safe.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_online_close",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Have you ever felt emotionally close to someone online, or in a space that wasn't face-to-face?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_distance_real",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Emotional intimacy isn't limited by location. Sometimes distance makes it easier to be real.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_imagine_connected",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "When you imagine feeling truly connected—like someone gets you—how would that change your day?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_softer_safer",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "That kind of connection doesn't fix everything… but it can make the world feel softer, safer.",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_explore_intimacy",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Would you want to explore ways to build emotional intimacy—even gently, even slowly?",
+        "user_response": ""
+    },
+    {
+        "id": "emotional_intimacy_followup_one_breath",
+        "section": "Follow-up: Feeling Alone Even When You're Not",
+        "prompt": "Wherever you are, it's okay. We can take this one breath, one truth, one moment at a time.",
+        "user_response": ""
+    }
+]

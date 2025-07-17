@@ -13,15 +13,7 @@ class NIYAsaathiApp {
         this.isRecording = false;
         this.isTyping = false;
         
-        // Firebase Functions URLs - will be replaced with actual URLs after deployment
-        this.API_BASE_URL = 'https://us-central1-niyasaathi-loneliness-coach.cloudfunctions.net'; // Firebase project ID
-        this.FIREBASE_FUNCTIONS = {
-            sendVerificationCode: `${this.API_BASE_URL}/sendVerificationCode`,
-            verifyCode: `${this.API_BASE_URL}/verifyCode`,
-            handleMessage: `${this.API_BASE_URL}/handleMessage`,
-            getUserData: `${this.API_BASE_URL}/getUserData`,
-            healthCheck: `${this.API_BASE_URL}/healthCheck`
-        };
+        this.API_BASE_URL = 'http://localhost:5000'; // Update with your backend URL
         
         this.init();
     }
@@ -126,7 +118,7 @@ class NIYAsaathiApp {
         sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.sendVerificationCode, {
+            const response = await fetch(`${this.API_BASE_URL}/auth/send-code`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -168,7 +160,7 @@ class NIYAsaathiApp {
         verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
         
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.verifyCode, {
+            const response = await fetch(`${this.API_BASE_URL}/auth/verify-code`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -227,15 +219,14 @@ class NIYAsaathiApp {
     
     async loadUserData() {
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.getUserData, {
+            const response = await fetch(`${this.API_BASE_URL}/user/data`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
                 }
             });
             
             if (response.ok) {
-                const data = await response.json();
-                this.userData = data.user_data;
+                this.userData = await response.json();
                 // Resume conversation from where user left off
                 if (this.userData.last_coach_message) {
                     this.addMessage('coach', this.userData.last_coach_message);
@@ -261,13 +252,14 @@ class NIYAsaathiApp {
         this.showTypingIndicator();
         
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.handleMessage, {
+            const response = await fetch(`${this.API_BASE_URL}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
                 },
                 body: JSON.stringify({
+                    user_id: this.currentUser.id,
                     message: message
                 })
             });
@@ -276,7 +268,7 @@ class NIYAsaathiApp {
             
             if (response.ok) {
                 this.hideTypingIndicator();
-                this.addMessage('coach', data.response, true); // Use Azure TTS for coach responses
+                this.addMessage('coach', data.text, true); // pass true to trigger backend audio
                 
                 // Update user data
                 this.userData = data.user_data;
@@ -318,35 +310,22 @@ class NIYAsaathiApp {
         
         // Play backend audio if enabled and it's from coach
         if (sender === 'coach' && this.voiceOutputEnabled && playBackendAudio) {
-            fetch('/speak', {
+            fetch(`${this.API_BASE_URL}/speak`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text })
             })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-                }
-                return res.blob();
-            })
+            .then(res => res.blob())
             .then(blob => {
                 const audioUrl = URL.createObjectURL(blob);
                 const audio = new Audio(audioUrl);
-                audio.play().catch(error => {
-                    console.error('Error playing Azure TTS audio:', error);
-                    // Fallback to browser TTS
-                    this.speakMessage(text);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching Azure TTS:', error);
-                // Fallback to browser TTS
-                this.speakMessage(text);
+                audio.play();
             });
-        } else if (sender === 'coach' && this.voiceOutputEnabled) {
-            // Use browser TTS as fallback or when backend audio is disabled
-            this.speakMessage(text);
         }
+        // Remove or comment out browser TTS
+        // if (sender === 'coach' && this.voiceOutputEnabled) {
+        //     this.speakMessage(text);
+        // }
     }
     
     formatMessage(text) {

@@ -1,0 +1,1 @@
+# Firebase/Supabase integration placeholder

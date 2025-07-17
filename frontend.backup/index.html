@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIYAsaathi - Your Loneliness Coach</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-functions-compat.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Authentication Screen -->
+        <div id="auth-screen" class="screen active">
+            <div class="auth-container">
+                <div class="logo">
+                    <i class="fas fa-heart"></i>
+                    <h1>NIYAsaathi</h1>
+                    <p>Your empathetic loneliness coach</p>
+                </div>
+                
+                <div class="auth-form">
+                    <h2>Welcome</h2>
+                    <p>Enter your phone number to start your journey</p>
+                    
+                    <div class="phone-input">
+                        <input type="tel" id="phone-number" placeholder="+1 (555) 123-4567" maxlength="15">
+                        <button id="send-code" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Code
+                        </button>
+                    </div>
+                    
+                    <div class="verification-input" style="display: none;">
+                        <input type="text" id="verification-code" placeholder="Enter 6-digit code" maxlength="6">
+                        <button id="verify-code" class="btn-primary">
+                            <i class="fas fa-check"></i>
+                            Verify
+                        </button>
+                    </div>
+                    
+                    <div class="auth-status" id="auth-status"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chat-screen" class="screen">
+            <div class="chat-header">
+                <div class="header-content">
+                    <div class="coach-info">
+                        <div class="coach-avatar">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="coach-details">
+                            <h3>NIYAsaathi</h3>
+                            <span class="status" id="coach-status">Online</span>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button id="history-btn" class="btn-icon" title="Conversation History">
+                            <i class="fas fa-history"></i>
+                        </button>
+                        <button id="voice-toggle" class="btn-icon" title="Toggle Voice">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="settings-btn" class="btn-icon" title="Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+                
+                <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>NIYAsaathi is typing...</span>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <button id="voice-input-btn" class="btn-icon voice-btn" title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    
+                    <div class="text-input-wrapper">
+                        <textarea 
+                            id="message-input" 
+                            placeholder="Type your message..." 
+                            rows="1"
+                            maxlength="500"
+                        ></textarea>
+                        <div class="input-actions">
+                            <button id="send-btn" class="btn-send" disabled>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="voice-status" id="voice-status" style="display: none;">
+                    <div class="voice-indicator">
+                        <div class="voice-waves">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span>Listening...</span>
+                    </div>
+                    <button id="stop-voice" class="btn-stop">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Settings</h3>
+                    <button class="close-btn" id="close-settings">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <label>Voice Settings</label>
+                        <div class="setting-item">
+                            <span>Enable Voice Output</span>
+                            <label class="toggle">
+                                <input type="checkbox" id="voice-output-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Voice Speed</span>
+                            <select id="voice-speed">
+                                <option value="0.8">Slow</option>
+                                <option value="1.0" selected>Normal</option>
+                                <option value="1.2">Fast</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>Account</label>
+                        <div class="setting-item">
+                            <span>Phone Number</span>
+                            <span id="user-phone">+1 (555) 123-4567</span>
+                        </div>
+                        <button id="logout-btn" class="btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Modal -->
+        <div id="history-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Conversation History</h3>
+                    <button class="close-btn" id="close-history">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="history-container" id="history-container">
+                        <!-- History items will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voice Permission Modal -->
+        <div id="voice-permission-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Voice Permission</h3>
+                </div>
+                <div class="modal-body">
+                    <p>NIYAsaathi would like to use your microphone for voice input. This helps create a more natural conversation experience.</p>
+                    <div class="permission-actions">
+                        <button id="allow-voice" class="btn-primary">
+                            <i class="fas fa-microphone"></i>
+                            Allow Microphone
+                        </button>
+                        <button id="deny-voice" class="btn-secondary">
+                            Maybe Later
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
