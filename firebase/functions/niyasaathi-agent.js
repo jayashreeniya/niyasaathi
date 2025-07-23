@@ -5,8 +5,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const cors = require('cors')({ origin: true });
 
-// Initialize Firebase Admin
-admin.initializeApp();
+// Firebase Admin is already initialized in the main functions file
 const db = admin.firestore();
 
 // Load environment variables
@@ -883,6 +882,9 @@ if (openaiApiKey) {
   console.log('Warning: OPENAI_API_KEY not found. AI features will be limited.');
 }
 
+// Export the NIYAsaathiAgent class
+module.exports = NIYAsaathiAgent;
+
 // ===== NEW FIREBASE FUNCTIONS (replacing Flask backend) =====
 
 // Send verification code
@@ -1600,3 +1602,6 @@ exports.sendActionItemReminders = functions.pubsub.schedule('every 1 hours').onR
     throw error;
   }
 });
+
+// Export the NIYAsaathiAgent class
+module.exports = NIYAsaathiAgent;

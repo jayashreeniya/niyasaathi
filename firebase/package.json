@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "microsoft-cognitiveservices-speech-sdk": "^1.45.0"
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "microsoft-cognitiveservices-speech-sdk": "^1.45.0",
+    "openai": "^5.10.1"
   }
 }

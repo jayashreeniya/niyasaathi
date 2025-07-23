@@ -1,7 +1,7 @@
 {
   "screening": {
     "q1": {
-      "question": "Hi there, I'm Niyasaathi. I'm here to walk with you through something that's real, tender, and often unspoken—loneliness. Let's take it one step at a time, together. Have you been feeling lonely recently?",
+      "question": "Hi there, I'm NIYAsaathi. I'm here to walk with you through something that's real, tender, and often unspoken—loneliness. Let's take it one step at a time, together. Have you been feeling lonely recently?",
       "type": "yes_no",
       "next": "q2",
       "branch": null

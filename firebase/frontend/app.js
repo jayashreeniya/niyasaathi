@@ -17,14 +17,25 @@ class NIYAsaathiApp {
         this.lastMessageTimestamp = null;
         this.currentAudioRequest = null;
         
-        // Firebase Functions URLs - will be replaced with actual URLs after deployment
-        this.API_BASE_URL = 'https://us-central1-niyasaathi-loneliness-coach.cloudfunctions.net'; // Firebase project ID
-        this.FIREBASE_FUNCTIONS = {
-            sendVerificationCode: `${this.API_BASE_URL}/sendVerificationCode`,
-            verifyCode: `${this.API_BASE_URL}/verifyCode`,
-            handleMessage: `${this.API_BASE_URL}/handleMessage`,
-            getUserData: `${this.API_BASE_URL}/getUserData`,
-            healthCheck: `${this.API_BASE_URL}/healthCheck`
+        // OLD Firebase Functions URLs - commented out but kept for reference
+        // this.API_BASE_URL = 'https://us-central1-niyasaathi-loneliness-coach.cloudfunctions.net'; // Firebase project ID
+        // this.FIREBASE_FUNCTIONS = {
+        //     sendVerificationCode: `${this.API_BASE_URL}/sendVerificationCode`,
+        //     verifyCode: `${this.API_BASE_URL}/verifyCode`,
+        //     handleMessage: `${this.API_BASE_URL}/handleMessage`,
+        //     getUserData: `${this.API_BASE_URL}/getUserData`,
+        //     healthCheck: `${this.API_BASE_URL}/healthCheck`
+        // };
+        
+        // NEW Google Cloud Function URLs
+        this.API_BASE_URL = 'https://us-central1-niyasaathi-loneliness-coach.cloudfunctions.net/niyasaathi-api'; // Google Cloud Function URL
+        this.GOOGLE_CLOUD_FUNCTIONS = {
+            sendVerificationCode: `${this.API_BASE_URL}/send-verification-code`,
+            verifyCode: `${this.API_BASE_URL}/verify-code`,
+            handleMessage: `${this.API_BASE_URL}/handle-message`,
+            getUserData: `${this.API_BASE_URL}/get-user-data`,
+            healthCheck: `${this.API_BASE_URL}/health`,
+            speak: `${this.API_BASE_URL}/speak`
         };
         
         this.init();
@@ -54,8 +65,8 @@ class NIYAsaathiApp {
             this.sendMessage();
         });
         document.getElementById('message-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
                 this.userHasInteracted = true;
                 this.sendMessage();
             }
@@ -91,7 +102,7 @@ class NIYAsaathiApp {
         // Modal close on outside click
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
+            if (e.target === modal) {
                     modal.classList.remove('active');
                 }
             });
@@ -134,7 +145,7 @@ class NIYAsaathiApp {
         sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.sendVerificationCode, {
+            const response = await fetch(this.GOOGLE_CLOUD_FUNCTIONS.sendVerificationCode, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,7 +187,7 @@ class NIYAsaathiApp {
         verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
         
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.verifyCode, {
+            const response = await fetch(this.GOOGLE_CLOUD_FUNCTIONS.verifyCode, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -195,7 +206,7 @@ class NIYAsaathiApp {
                 localStorage.setItem('niyasaathi_user', JSON.stringify(data.user));
                 this.isAuthenticated = true;
                 
-                this.showAuthStatus('Welcome to NIYAsaathi!', 'success');
+                this.showAuthStatus('Welcome to Niyasaathi!', 'success');
                 setTimeout(() => {
                     this.showChatScreen();
                     this.loadUserData();
@@ -234,15 +245,19 @@ class NIYAsaathiApp {
     
     async loadUserData() {
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.getUserData, {
+            const response = await fetch(this.GOOGLE_CLOUD_FUNCTIONS.getUserData, {
+                method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token: localStorage.getItem('niyasaathi_token')
+                })
             });
             
             if (response.ok) {
                 const data = await response.json();
-                this.userData = data.user_data;
+                this.userData = data;
                 
                 // Check if user has conversation history
                 const hasConversationHistory = this.userData.conversation_history && this.userData.conversation_history.length > 0;
@@ -252,8 +267,12 @@ class NIYAsaathiApp {
                     this.addMessage('coach', this.userData.last_coach_message, true);
                 } else {
                     // First-time user - show welcome message and play it
-                    this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?', true);
+                    this.addMessage('coach', 'Hi there! I\'m Niyasaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?', true);
                 }
+            } else if (response.status === 401) {
+                // Token expired or invalid
+                console.log('Token expired, logging out');
+                this.logout();
             }
         } catch (error) {
             console.error('Error loading user data:', error);
@@ -280,13 +299,13 @@ class NIYAsaathiApp {
         this.showTypingIndicator();
         
         try {
-            const response = await fetch(this.FIREBASE_FUNCTIONS.handleMessage, {
+            const response = await fetch(this.GOOGLE_CLOUD_FUNCTIONS.handleMessage, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('niyasaathi_token')}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    token: localStorage.getItem('niyasaathi_token'),
                     message: message
                 })
             });
@@ -295,7 +314,7 @@ class NIYAsaathiApp {
             
             if (response.ok) {
                 this.hideTypingIndicator();
-                this.addMessage('coach', data.response, true); // Use Azure TTS for coach responses
+                this.addMessage('coach', data.response, true); // Use Google TTS for coach responses
                 
                 // Update user data
                 this.userData = data.user_data;
@@ -373,8 +392,8 @@ class NIYAsaathiApp {
                 const requestId = Date.now() + Math.random();
                 this.currentAudioRequest = requestId;
                 
-                // Use the relative path - Firebase hosting will rewrite this to the function
-                fetch('/speak', {
+                // Use the Google Cloud Function URL for TTS
+                fetch(this.GOOGLE_CLOUD_FUNCTIONS.speak, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text })
@@ -590,7 +609,7 @@ class NIYAsaathiApp {
             this.voiceEnabled = true;
             this.hideVoicePermissionModal();
             this.startVoiceInput();
-        } catch (error) {
+            } catch (error) {
             console.error('Error requesting microphone permission:', error);
             this.hideVoicePermissionModal();
         }

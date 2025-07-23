@@ -1,8 +1,8 @@
 {
   "functions": {
     "source": "functions",
-    "predeploy": [
-    ]
+    "runtime": "python311",
+    "predeploy": []
   },
   "firestore": {
     "database": "(default)",

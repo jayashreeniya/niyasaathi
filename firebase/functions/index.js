@@ -6,12 +6,28 @@ const os = require('os');
 const fs = require('fs');
 const textToSpeech = require('@google-cloud/text-to-speech');
 const NudgeSystem = require('./nudgeSystem');
+const NIYAsaathiAgent = require('./niyasaathi-agent-class');
 
 admin.initializeApp();
 const db = admin.firestore();
 
 // Initialize Nudge System
 const nudgeSystem = new NudgeSystem();
+
+// Initialize AI Agent
+const openaiApiKey = process.env.OPENAI_API_KEY || functions.config().openai?.api_key;
+let aiAgent = null;
+if (openaiApiKey) {
+  try {
+    aiAgent = new NIYAsaathiAgent(openaiApiKey);
+    console.log('✅ AI Agent initialized successfully');
+  } catch (error) {
+    console.error('AI Agent initialization error:', error);
+    aiAgent = null;
+  }
+} else {
+  console.log('Warning: OPENAI_API_KEY not found. AI features will be limited.');
+}
 
 // Twilio configuration helper function
 function getTwilioClient() {
@@ -626,54 +642,390 @@ exports.speak = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  // Preprocess text to make it more empathetic
-  let processedText = text
-    // Add pauses after commas and periods for more natural speech
-    .replace(/,/g, ', <break time="300ms"/>')
-    .replace(/\./g, '. <break time="500ms"/>')
-    // Add gentle pauses for questions
-    .replace(/\?/g, '? <break time="400ms"/>');
-
-  console.log('Google TTS request - Text length:', processedText.length);
-  console.log('Google TTS request - Text preview:', processedText.substring(0, 100) + '...');
+  console.log('Google TTS request - Text length:', text.length);
+  console.log('Google TTS request - Text preview:', text.substring(0, 100) + '...');
 
   try {
     // Initialize Google Cloud TTS client only when needed
     const client = new textToSpeech.TextToSpeechClient();
 
-    // Configure the request with the Indian female voice
-    const request = {
-      input: { text: processedText },
-      voice: {
-        languageCode: 'en-IN',
-        name: 'en-IN-Chirp3-HD-Despina'
-      },
-      audioConfig: {
-        audioEncoding: 'LINEAR16',
-        effectsProfileId: ['small-bluetooth-speaker-class-device'],
-        speakingRate: 0.81  // Back to original speed
+    // Remove all SSML and chunk at sentence boundaries for smooth audio
+    const sentences = text.match(/[^\.!\?]+[\.!\?]+/g) || [text];
+    const chunks = [];
+    let currentChunk = '';
+
+    for (const sentence of sentences) {
+      if ((currentChunk + sentence).length > 4500) { // stay under 5000 char limit
+        if (currentChunk) chunks.push(currentChunk);
+        currentChunk = sentence;
+      } else {
+        currentChunk += sentence;
       }
-    };
+    }
+    if (currentChunk) chunks.push(currentChunk);
 
-    console.log('Using Google TTS voice:', request.voice.name);
-    console.log('Audio config:', request.audioConfig);
-
-    // Perform the text-to-speech request
-    const [response] = await client.synthesizeSpeech(request);
-    
-    if (!response.audioContent) {
-      throw new Error('No audio content received from Google TTS');
+    // If text is short enough, process as single chunk
+    if (chunks.length === 0) {
+      chunks.push(text);
     }
 
-    console.log('Google TTS response received, audio size:', response.audioContent.length, 'bytes');
+    console.log('Processing', chunks.length, 'text chunks');
 
-    // Send the audio as response
+    // Synthesize each chunk and concatenate audio buffers
+    let audioBuffers = [];
+    for (const chunk of chunks) {
+      const request = {
+        input: { text: chunk },
+        voice: {
+          languageCode: 'en-IN',
+          name: 'en-IN-Chirp3-HD-Gacrux'
+        },
+        audioConfig: {
+          audioEncoding: 'LINEAR16',
+          speakingRate: 0.81
+        }
+      };
+
+      console.log('Processing chunk:', chunk.substring(0, 50) + '...');
+
+      const [response] = await client.synthesizeSpeech(request);
+      
+      if (!response.audioContent) {
+        throw new Error('No audio content received from Google TTS');
+      }
+
+      audioBuffers.push(Buffer.from(response.audioContent, 'base64'));
+    }
+
+    // Concatenate all audio buffers
+    const finalAudio = Buffer.concat(audioBuffers);
+    console.log('Final audio size:', finalAudio.length, 'bytes');
+
+    // Send the concatenated audio as response
     res.set('Content-Type', 'audio/wav');
     res.set('Content-Disposition', 'inline; filename="response.wav"');
-    res.send(Buffer.from(response.audioContent, 'base64'));
+    res.send(finalAudio);
 
   } catch (err) {
     console.error('Google TTS error:', err);
     res.status(500).json({ error: 'Speech synthesis failed: ' + err.message });
+  }
+});
+
+// Utility functions for authentication and user management
+function generateToken(userId) {
+  const jwt = require('jsonwebtoken');
+  const secret = functions.config().jwt?.secret || process.env.JWT_SECRET_KEY || 'your-jwt-secret-key-here';
+  
+  const payload = {
+    user_id: userId,
+    exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30 days
+    iat: Math.floor(Date.now() / 1000)
+  };
+  
+  return jwt.sign(payload, secret, { algorithm: 'HS256' });
+}
+
+function verifyToken(token) {
+  const jwt = require('jsonwebtoken');
+  const secret = functions.config().jwt?.secret || process.env.JWT_SECRET_KEY || 'your-jwt-secret-key-here';
+  return jwt.verify(token, secret);
+}
+
+function generateVerificationCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+async function getUserData(userId) {
+  try {
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (userDoc.exists) {
+      return userDoc.data();
+    } else {
+      // Create new user data
+      const newUserData = {
+        user_id: userId,
+        created_at: admin.firestore.FieldValue.serverTimestamp(),
+        last_updated: admin.firestore.FieldValue.serverTimestamp(),
+        conversation_history: [],
+        script_progress: 0,
+        current_stage: 'screening',
+        user_preferred_name: null
+      };
+      await saveUserData(userId, newUserData);
+      return newUserData;
+    }
+  } catch (error) {
+    console.error('Error getting user data:', error);
+    return null;
+  }
+}
+
+async function saveUserData(userId, userData) {
+  try {
+    userData.last_updated = admin.firestore.FieldValue.serverTimestamp();
+    await db.collection('users').doc(userId).set(userData, { merge: true });
+  } catch (error) {
+    console.error('Error saving user data:', error);
+  }
+}
+
+// Handle chat message
+exports.handleMessage = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  try {
+    // Verify token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      res.status(401).json({ error: 'Token is missing' });
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
+    let payload;
+    try {
+      payload = verifyToken(token);
+    } catch (error) {
+      res.status(401).json({ error: 'Invalid token' });
+      return;
+    }
+
+    const { message } = req.body;
+    const userId = payload.user_id;
+
+    if (!message) {
+      res.status(400).json({ error: 'Message is required' });
+      return;
+    }
+
+    // Get user data
+    let userData = await getUserData(userId);
+
+    // Process message with AI agent
+    let response;
+    if (aiAgent) {
+      const result = await aiAgent.processMessage(userData, message);
+      response = result.response;
+      userData = result.user_data;
+    } else {
+      response = "I'm sorry, but I'm not able to process messages right now. Please try again later.";
+    }
+
+    // Save updated user data
+    await saveUserData(userId, userData);
+
+    res.json({
+      response: response,
+      user_data: userData
+    });
+
+  } catch (error) {
+    console.error('Error handling message:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get user data
+exports.getUserData = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  if (req.method !== 'GET') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  try {
+    // Verify token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      res.status(401).json({ error: 'Token is missing' });
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
+    let payload;
+    try {
+      payload = verifyToken(token);
+    } catch (error) {
+      res.status(401).json({ error: 'Invalid token' });
+      return;
+    }
+
+    const userId = payload.user_id;
+    const userData = await getUserData(userId);
+
+    res.json({ user_data: userData });
+
+  } catch (error) {
+    console.error('Error getting user data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Send verification code
+exports.sendVerificationCode = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  try {
+    const { phone_number } = req.body;
+
+    if (!phone_number) {
+      res.status(400).json({ error: 'Phone number is required' });
+      return;
+    }
+
+    // Generate verification code
+    const code = generateVerificationCode();
+
+    // Store code in Firestore
+    await db.collection('verification_codes').doc(phone_number).set({
+      code: code,
+      created_at: admin.firestore.FieldValue.serverTimestamp(),
+      expires_at: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+    });
+
+    // For development, log the code instead of sending SMS
+    console.log(`Verification code for ${phone_number}: ${code}`);
+
+    res.json({ message: 'Verification code sent successfully' });
+
+  } catch (error) {
+    console.error('Error sending verification code:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Verify code
+exports.verifyCode = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  try {
+    const { phone_number, code } = req.body;
+
+    if (!phone_number || !code) {
+      res.status(400).json({ error: 'Phone number and code are required' });
+      return;
+    }
+
+    // Get stored verification code
+    const codeDoc = await db.collection('verification_codes').doc(phone_number).get();
+
+    if (!codeDoc.exists) {
+      res.status(400).json({ error: 'Invalid verification code' });
+      return;
+    }
+
+    const storedData = codeDoc.data();
+    const now = new Date();
+
+    if (now > storedData.expires_at.toDate()) {
+      res.status(400).json({ error: 'Verification code has expired' });
+      return;
+    }
+
+    if (storedData.code !== code) {
+      res.status(400).json({ error: 'Invalid verification code' });
+      return;
+    }
+
+    // Generate user ID and token
+    const userId = `user_${phone_number.replace(/\D/g, '')}`;
+    const token = generateToken(userId);
+
+    // Create or update user
+    const user = {
+      id: userId,
+      phone_number: phone_number,
+      created_at: admin.firestore.FieldValue.serverTimestamp(),
+      last_login: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection('users').doc(userId).set(user, { merge: true });
+
+    // Delete the verification code
+    await db.collection('verification_codes').doc(phone_number).delete();
+
+    res.json({
+      success: true,
+      token: token,
+      user: user
+    });
+
+  } catch (error) {
+    console.error('Error verifying code:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Health check
+exports.healthCheck = functions.https.onRequest(async (req, res) => {
+  // Enable CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  try {
+    res.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      ai_agent_available: !!aiAgent,
+      openai_configured: !!openaiApiKey
+    });
+  } catch (error) {
+    console.error('Health check error:', error);
+    res.status(500).json({ error: 'Health check failed' });
   }
 });

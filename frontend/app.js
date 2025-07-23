@@ -187,7 +187,7 @@ class NIYAsaathiApp {
                 localStorage.setItem('niyasaathi_user', JSON.stringify(data.user));
                 this.isAuthenticated = true;
                 
-                this.showAuthStatus('Welcome to NIYAsaathi!', 'success');
+                this.showAuthStatus('Welcome to Niyasaathi!', 'success');
                 setTimeout(() => {
                     this.showChatScreen();
                     this.loadUserData();
@@ -222,7 +222,7 @@ class NIYAsaathiApp {
         document.getElementById('user-phone').textContent = this.currentUser.phone_number;
         
         // Show welcome message
-        this.addMessage('coach', 'Hi there! I\'m NIYAsaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?');
+        this.addMessage('coach', 'Hi there! I\'m Niyasaathi. I\'m here to walk with you through something that\'s real, tender, and often unspoken—loneliness. Let\'s take it one step at a time, together. Have you been feeling lonely recently?');
     }
     
     async loadUserData() {
