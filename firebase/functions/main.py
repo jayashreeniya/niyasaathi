@@ -16,6 +16,29 @@ from dotenv import load_dotenv
 # Load environment variables from .env file in root directory
 load_dotenv('.env')
 
+# Read API key directly from .env file as fallback
+def get_api_key_from_env_file():
+    try:
+        with open('.env', 'r') as f:
+            for line in f:
+                if line.startswith('OPENAI_API_KEY='):
+                    return line.split('=', 1)[1].strip()
+    except Exception as e:
+        print(f"Error reading .env file: {e}")
+    return None
+
+# Debug: Check if API key is loaded correctly
+api_key = os.environ.get('OPENAI_API_KEY')
+if not api_key:
+    api_key = get_api_key_from_env_file()
+    if api_key:
+        os.environ['OPENAI_API_KEY'] = api_key
+        print(f"✅ API key loaded from .env file: {api_key[:20]}...{api_key[-10:]}")
+    else:
+        print("❌ API key not found in environment variables or .env file")
+else:
+    print(f"✅ API key loaded from environment: {api_key[:20]}...{api_key[-10:]}")
+
 # Initialize Firebase Admin
 initialize_app()
 
@@ -522,9 +545,10 @@ def get_ai_agent():
     global ai_agent
     if ai_agent is None:
         openai_api_key = os.environ.get('OPENAI_API_KEY')
+        print(f"🔍 Debug: API key from environment: {openai_api_key[:20] if openai_api_key else 'None'}...")
         if openai_api_key:
             try:
-                print(f'Initializing AI Agent with OpenAI API key: {openai_api_key[:10]}...')
+                print(f'Initializing AI Agent with OpenAI API key: {openai_api_key[:20]}...')
                 ai_agent = NIYAsaathiAgent(openai_api_key)
                 print('✅ AI Agent initialized successfully')
             except Exception as error:
